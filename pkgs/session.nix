@@ -56,7 +56,7 @@ let
     secondary-color='#772953'
     color-shading-type='vertical'
     [com.canonical.Unity.Launcher]
-    favorites=['application://nemo.desktop', 'application://xterm.desktop', 'application://unity-control-center.desktop', 'unity://running-apps', 'unity://devices']
+    favorites=['application://unity-files.desktop', 'application://unity-terminal.desktop', 'application://unity-control-center.desktop', 'unity://running-apps', 'unity://devices']
     [com.canonical.Unity.ApplicationsLens]
     display-available-apps=false
     EOF
@@ -72,7 +72,31 @@ in pkgs.stdenvNoCC.mkDerivation {
   dontBuild = true;
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/share/xsessions $out/share/cinnamon-session/sessions $out/share/nemo/actions
+    mkdir -p $out/bin $out/share/applications $out/share/xsessions $out/share/cinnamon-session/sessions $out/share/nemo/actions
+    cat >$out/share/applications/unity-files.desktop <<EOF
+    [Desktop Entry]
+    Name=Files
+    Comment=Browse and organize files
+    Exec=${pkgs.nemo}/bin/nemo
+    Icon=system-file-manager
+    Terminal=false
+    Type=Application
+    Categories=System;FileManager;
+    StartupNotify=true
+    StartupWMClass=Nemo
+    EOF
+    cat >$out/share/applications/unity-terminal.desktop <<EOF
+    [Desktop Entry]
+    Name=Terminal
+    Comment=Use the command line
+    Exec=${pkgs.xterm}/bin/xterm
+    Icon=utilities-terminal
+    Terminal=false
+    Type=Application
+    Categories=System;TerminalEmulator;
+    StartupNotify=true
+    StartupWMClass=XTerm
+    EOF
     mkdir -p $out/etc/xdg/autostart
     # These are supervised by the Unity target, not launched a second time
     # by the XDG autostart reader in the session manager.
