@@ -88,9 +88,12 @@ in {
     };
     systemd.user.services = {
       unity-shell = (sessionService "Unity shell" "${u.compiz}/bin/compiz --replace ccp") // {
-        after = [ "graphical-session-pre.target" "unity-panel.service" ];
+        after = [ "graphical-session-pre.target" "unity-panel.service" "unity-bamf.service" ];
       };
-      unity-panel = sessionService "Unity panel service" "${u.unity}/lib/unity/unity-panel-service";
+      unity-panel = (sessionService "Unity panel service" "${u.unity}/lib/unity/unity-panel-service") // {
+        after = [ "graphical-session-pre.target" "unity-bamf.service" ];
+      };
+      unity-bamf = sessionService "Unity application matching" "${u.bamf-session}/libexec/bamf/bamfdaemon";
       unity-ibus = sessionService "Unity input methods" "${pkgs.ibus}/bin/ibus-daemon --xim";
       unity-hud = sessionService "Unity HUD" "${u.hud}/libexec/hud/hud-service";
       unity-nemo = sessionService "Unity desktop icons" "${pkgs.nemo}/bin/nemo-desktop";

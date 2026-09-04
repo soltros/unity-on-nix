@@ -22,6 +22,7 @@ assert builtins.elem enabled.pkgs.xdg-desktop-portal-gtk enabled.config.xdg.port
 assert builtins.elem "unity-session.target" enabled.config.systemd.user.services.unity-shell.partOf;
 assert enabled.config.services.xserver.displayManager.lightdm.enable;
 assert enabled.config.services.xserver.displayManager.lightdm.greeter.name == "unity-greeter";
+assert builtins.hasAttr "unity-bamf" enabled.config.systemd.user.services;
 assert !enabled.config.services.xserver.desktopManager.cinnamon.enable;
 assert !(builtins.elem enabled.pkgs.cinnamon-settings-daemon enabled.config.environment.systemPackages);
 pkgs.runCommand "unity-module-evaluation-check" {} "touch $out"

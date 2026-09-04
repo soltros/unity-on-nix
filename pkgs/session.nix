@@ -12,7 +12,7 @@ let
     indicator-power indicator-session indicator-datetime indicator-keyboard
     indicator-bluetooth indicator-messages
   ] ++ (with pkgs; [
-    cinnamon-desktop libgnomekbd ibus nemo
+    cinnamon-desktop libgnomekbd ibus glib nemo
     zeitgeist notify-osd networkmanagerapplet polkit_gnome
     ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts xterm
   ]);
@@ -47,6 +47,9 @@ let
     gtk-theme='Ambiance'
     icon-theme='ubuntu-mono-dark'
     font-name='Ubuntu 11'
+    [org.gnome.desktop.default-applications.terminal]
+    exec='xterm'
+    exec-arg='-e'
     [org.gnome.desktop.background]
     picture-uri=""
     primary-color='#2c001e'

@@ -28,6 +28,7 @@ in pkgs.runCommand "unity-shell-smoke" {
   export __GLX_VENDOR_LIBRARY_NAME=mesa
   export LIBGL_ALWAYS_SOFTWARE=1
   export LIBGL_DRIVERS_PATH=${pkgs.mesa}/lib/dri
+  export COMPIZ_METADATA_PATH=${u.unity}/share/compiz
   export COMPIZ_PLUGIN_DIR=${u.unity}/lib/compiz:${u.compiz}/lib/compiz
   export COMPIZ_CONFIG_DIR=${u.unity}/etc/compizconfig
   export COMPIZ_CONFIG_PROFILE=ubuntu
@@ -41,7 +42,7 @@ in pkgs.runCommand "unity-shell-smoke" {
   done
   glxinfo -B >$out/renderer.txt
   dbus-run-session --config-file=${pkgs.dbus}/share/dbus-1/session.conf -- ${pkgs.bash}/bin/bash -euc '
-    ${u.compiz}/bin/compiz --debug --replace composite opengl compiztoolbox copytex scale move resize place unityshell >"$out/unity.log" 2>&1 &
+    ${u.compiz}/bin/compiz --debug --replace ccp >"$out/unity.log" 2>&1 &
     shell_pid=$!
     trap "kill $shell_pid 2>/dev/null || true" EXIT
     sleep 15
@@ -53,6 +54,12 @@ in pkgs.runCommand "unity-shell-smoke" {
     xwininfo -root -tree >"$out/windows.txt"
     grep -q '"unity-launcher"' "$out/windows.txt"
     grep -q '"unity-panel"' "$out/windows.txt"
+    ${pkgs.xterm}/bin/xterm -title unity-smoke-xterm &
+    xterm_pid=$!
+    sleep 2
+    xwininfo -root -tree >"$out/windows-after-xterm.txt"
+    grep -q 'unity-smoke-xterm' "$out/windows-after-xterm.txt"
+    kill "$xterm_pid" 2>/dev/null || true
     import -window root "$out/desktop.png"
   '
 ''
