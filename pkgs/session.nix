@@ -12,7 +12,7 @@ let
     indicator-power indicator-session indicator-datetime indicator-keyboard
     indicator-bluetooth indicator-messages
   ] ++ (with pkgs; [
-    cinnamon-desktop libgnomekbd ibus glib nemo
+    cinnamon-desktop libgnomekbd ibus glib.bin nemo
     zeitgeist notify-osd networkmanagerapplet polkit_gnome
     ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts xterm
   ]);
@@ -126,7 +126,9 @@ in pkgs.stdenvNoCC.mkDerivation {
     export UNITY_INDICATOR_SERVICE_DIR=${indicators}/share/unity/indicators
     export GSETTINGS_SCHEMA_DIR=${schemas}/share/glib-2.0/schemas
     export XDG_DATA_DIRS=@out@/share:${data}/share:''${XDG_DATA_DIRS:-/run/current-system/sw/share}
-    export XDG_CONFIG_DIRS=@out@/etc/xdg:${u.unity-settings-daemon}/etc/xdg:''${XDG_CONFIG_DIRS:-/etc/xdg}
+    # The applications lens installs its menu definition under etc/xdg. If it
+    # is absent, the Dash starts normally but indexes an empty application set.
+    export XDG_CONFIG_DIRS=@out@/etc/xdg:${u.unity-lens-applications}/etc/xdg:${u.unity-settings-daemon}/etc/xdg:''${XDG_CONFIG_DIRS:-/etc/xdg}
     export PATH=${lib.makeBinPath components}:$PATH
     export GTK_DATA_PREFIX=${data}
     export GTK_MODULES=unity-gtk-module

@@ -83,7 +83,6 @@ in {
     systemd.user.targets.unity-session = {
       description = "Unity desktop session";
       requires = [ "graphical-session-pre.target" ];
-      bindsTo = [ "graphical-session.target" ];
       after = [ "graphical-session-pre.target" ];
     };
     systemd.user.services = {
@@ -93,7 +92,17 @@ in {
       unity-panel = (sessionService "Unity panel service" "${u.unity}/lib/unity/unity-panel-service") // {
         after = [ "graphical-session-pre.target" "unity-bamf.service" ];
       };
-      unity-bamf = sessionService "Unity application matching" "${u.bamf-session}/libexec/bamf/bamfdaemon";
+      unity-bamf = (sessionService "Unity application matching" "${u.bamf-session}/libexec/bamf/bamfdaemon") // {
+        # Type=dbus keeps dependent services queued until BAMF has actually
+        # acquired its name; a running process alone is too early for clicks.
+        serviceConfig = {
+          ExecStart = "${u.bamf-session}/libexec/bamf/bamfdaemon";
+          Restart = "on-failure";
+          RestartSec = 2;
+          Type = "dbus";
+          BusName = "org.ayatana.bamf";
+        };
+      };
       unity-ibus = sessionService "Unity input methods" "${pkgs.ibus}/bin/ibus-daemon --xim";
       unity-hud = sessionService "Unity HUD" "${u.hud}/libexec/hud/hud-service";
       unity-nemo = sessionService "Unity desktop icons" "${pkgs.nemo}/bin/nemo-desktop";
