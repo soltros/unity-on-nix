@@ -11,13 +11,13 @@ features are still being tested; this is not yet a release-ready desktop.
 
 ## Use as a flake input
 
-While developing from this checkout:
+Add the repository directly to your flake inputs:
 
 ```nix
 inputs = {
   nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
   unity-on-nix = {
-    url = "path:/home/derrik/unity-on-nix";
+    url = "github:soltros/unity-on-nix";
     inputs.nixpkgs.follows = "nixpkgs";
   };
 };
@@ -38,8 +38,8 @@ unless your configuration specifies another default. It does not enable automati
 login. A display manager must be enabled separately; LightDM is used by the test VM.
 The packaged Unity greeter is not yet selected by the module.
 
-Once this repository is published, replace the local `path:` URL with its actual
-GitHub or GitLab flake URL. No published repository URL is assumed here.
+The repository is [soltros/unity-on-nix](https://github.com/soltros/unity-on-nix).
+For local development, you can instead use `path:/absolute/path/to/unity-on-nix`.
 `inputs.nixpkgs.follows` is supported, but validation currently uses the revision
 in `flake.lock` (NixOS 26.05). Other revisions, including unstable, require testing.
 
