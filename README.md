@@ -1,151 +1,136 @@
-# Unity 7 on NixOS — separate experiment
+# Unity 7 on NixOS
 
-This directory is a standalone flake and NixOS module. Nothing imports it into
-the host configuration. **It does not yet contain a working Unity runtime.**
-The flake now includes Compiz 0.9 and Nux 4 package definitions. The module
-and VM session wiring can be tested independently. The VM diagnostic opens
-a labelled terminal, not Unity.
+A standalone flake packaging Ubuntu Unity 7 and its supporting desktop services.
+The module is separate from your NixOS configuration until you import and enable
+it. Development currently targets **x86_64-linux and X11**.
 
-## Foundation packages
+**Status: experimental, undergoing real-session testing.** The complete package
+set builds, and a graphical smoke test renders the Unity launcher, panel and Dash
+windows. The isolated NixOS VM builds and boots. Login integration and desktop
+features are still being tested; this is not yet a release-ready desktop.
 
-```sh
-nix build path:.#compiz --out-link result-compiz
-nix build path:.#nux --out-link result-nux
-nix build path:.#checks.x86_64-linux.foundations
-```
+## Use as a flake input
 
-Sources are hash-pinned Ubuntu source packages:
-
-- Compiz `0.9.14.2+25.10.20250930-0ubuntu3`, including libcompizconfig,
-  its GSettings backend, and compositor plugins. The Python settings GUI,
-  GTK window decorator and optional protobuf cache are omitted in this
-  foundation build. Unity supplies its own window decorations.
-- Nux `4.0.8+18.10.20180623-0ubuntu14`, with Ubuntu's patch series applied,
-  including PCRE2, ICU and modern Boost compatibility changes. Gestures
-  are enabled using Geis. The helper is installed at
-  `result-nux/libexec/nux/unity_support_test`.
-
-The foundation check verifies pkg-config dependency discovery, Compiz's
-CMake integration, a C++ consumer linked against Nux, Compiz's version
-command, the Nux helper's startup, and library resolution for Unity's four
-required Compiz plugins. It does not start a graphical desktop. Upstream graphical test
-suites are disabled in these initial package builds.
-
-These packages are outputs of this flake only; they do not replace host
-packages, register a host session, or complete the `runtimePackage` contract.
-
-## Test the module separately
-
-From this directory:
-
-```sh
-nix flake check path:.
-nix build path:.#nixosConfigurations.unity-module-test.config.system.build.vm
-./result/bin/run-unity-module-test-vm
-```
-
-The diagnostic VM uses an unprivileged `tester` account, password `test-only`,
-with automatic login. These settings belong only to the VM. A successful
-diagnostic opens a terminal saying that runtime packaging is pending. Close
-the terminal to end the diagnostic session. The VM may create a disk image
-in the directory from which it is launched.
-
-## Module interface for the real runtime
-
-In a future test configuration, import `modules/unity.nix` and set:
+While developing from this checkout:
 
 ```nix
-services.desktopManager.unityExperimental = {
-  enable = true;
-  runtimePackage = myUnityRuntime;
-  supportPackages = [ ];
+inputs = {
+  nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+  unity-on-nix = {
+    url = "path:/home/derrik/unity-on-nix";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
 };
 ```
 
-`myUnityRuntime` must be a real derivation exposing `bin/unity-session`.
-It is deliberately not defaulted to an unrelated package or placeholder.
-Enabling without a runtime raises an explanatory assertion. The module
-registers an X11 session, enables D-Bus, dconf and polkit, and creates the
-`unity` PAM service requested by Unity's lock screen. It does not choose a
-display manager or enable automatic login outside the diagnostic VM.
+Add these entries to your `nixosSystem.modules` list:
 
-The runtime wrapper must set Unity's session environment, arrange schema,
-indicator and Compiz plugin discovery, start the required supporting daemons,
-supervise Compiz, and stop its services at logout. Package wrappers must supply
-the necessary XDG data paths; installing packages alone is insufficient.
-User systemd units should be explicitly integrated with session lifetime,
-not started globally for every desktop. The PAM definition is an initial
-integration point; real lock/unlock behavior still requires runtime testing.
+```nix
+inputs.unity-on-nix.nixosModules.default
+{
+  services.desktopManager.unity.enable = true;
+  services.xserver.displayManager.lightdm.enable = true;
+}
+```
 
-## Source audit and implementation order
+Select **Unity** at login. The module also sets Unity as the default session
+unless your configuration specifies another default. It does not enable automatic
+login. A display manager must be enabled separately; LightDM is used by the test VM.
+The packaged Unity greeter is not yet selected by the module.
 
-Inspected upstream Unity 7.7.1 at commit
-`6f01ccb7395ca0fb3ee5f220263d9704a18ce194`:
-[source](https://gitlab.com/ubuntu-unity/unity/unity/-/tree/6f01ccb7395ca0fb3ee5f220263d9704a18ce194).
-This is a source review, not evidence of a successful Unity build.
+Once this repository is published, replace the local `path:` URL with its actual
+GitHub or GitLab flake URL. No published repository URL is assumed here.
+`inputs.nixpkgs.follows` is supported, but validation currently uses the revision
+in `flake.lock` (NixOS 26.05). Other revisions, including unstable, require testing.
 
-1. **Compiz 0.9 and Nux 4 foundation: built.** The root CMake file requires
-   `compiz >= 0.9.11` and `nux-4.0 >= 4.0.5`. The unityshell plugin also needs
-   Compiz's composite, opengl, compiztoolbox and scale interfaces. Use a
-   compatible Compiz 0.9 source revision; Compiz Reloaded 0.8 is not a drop-in
-   replacement. The new definitions pin both sources. Building these
-   dependencies does not yet establish compatibility with the complete Unity
-   shell; that needs the next build stage.
-2. **Complete the build dependency set.** The installed Nixpkgs revision
-   `02e08985a27c65ffd33d434eeb2e660a2e4dc84d` exposes BAMF, Dee, libunity,
-   libindicator, libdbusmenu, Geis and Zeitgeist. Attribute checks did not find
-   `compiz`, `nux`, `libunity-misc`, `xpathselect`, `unity-settings-daemon`,
-   `gsettings-ubuntu-schemas`, `unity-gtk-module`, `libido` or `hud` under those
-   names. Compiz and Nux are now supplied by this flake. This is not an
-   exhaustive search for alternate package names.
-   Existing libraries still need version/API verification, especially
-   libunity's private protocol and libindicator's service API.
-3. **Patch installation and discovery paths.** `services/CMakeLists.txt`
-   hardcodes `/usr/lib/systemd/user`. `data/CMakeLists.txt` obtains an install
-   directory from systemd, potentially pointing into a different store
-   output. `data/compiz/CMakeLists.txt` similarly installs into directories
-   read from libcompizconfig. Redirect all installs to Unity's own output.
-   Enable `GSETTINGS_LOCALINSTALL=ON` and handle schema compilation through
-   Nix packaging. Patch `/usr/bin/compiz` in `data/unity7.service.in` and
-   `/usr/lib/nux/unity_support_test` in `tools/compiz-profile-selector.in`.
-   `tools/systemd-prestart-check` assumes an Ubuntu session file and older
-   cgroup layout; use explicit NixOS session supervision instead.
-4. **Assemble the runtime.** The top-level CMake file derives indicator
-   discovery directories from libindicator's prefix, while
-   `services/panel-service.c` scans those fixed directories. Separate Nix
-   package outputs require a combined data directory or patched search
-   paths. Expose schemas, icons, D-Bus services and Compiz plugin metadata
-   deliberately. Package a compatible session manager or implement equivalent
-   startup/lifetime handling. Add the settings daemon, local application/file
-   scopes and indicators to reach a useful desktop; add HUD/global-menu
-   integration afterward.
-5. **Replace the VM fixture with the real runtime.** Verify graphical login,
-   launcher and Dash, application matching, indicators, settings persistence,
-   lock/unlock, logout and service cleanup. Use an accelerated X11 VM or test
-   hardware as needed. A successful module evaluation does not test graphics.
+Optional module settings:
 
-The source implements Unity as a Compiz plugin. Preserving the existing
-desktop means targeting X11 first. Disabling `ENABLE_X_SUPPORT` excludes
-the shell, panel and lock screen; it does not produce a Wayland desktop.
+```nix
+services.desktopManager.unity.extraPackages = [ pkgs.firefox ];
+```
 
-## Validation
+`services.desktopManager.unity.package` accepts an alternate session package with
+`providedSessions` and `components` passthru attributes. Individual packages are
+also exported under `packages.x86_64-linux`, and `overlays.default` exposes them
+as `pkgs.unity7`. Building the default package does not register a desktop session;
+NixOS system integration is provided by the module.
 
-`tests/eval.nix` checks disabled-module isolation, the missing-runtime
-assertion, and session/PAM registration when supplied a fixture package.
-The module evaluation checks passed against the installed Nixpkgs revision
-above, and the diagnostic VM derivation evaluated successfully. No graphical
-VM boot or real Unity compilation has been performed. `nix flake check
-path:. --no-build` also passed against the committed lock file, which pins
-Nixpkgs `a5cc6f2c37bf518436dc8d1c288ccd0c43c2f4c4`.
+## Test without changing your host
 
-On 2026-09-04, both foundation package builds and **`nix flake check path:.`**
-(including actual check builds) passed on x86_64-linux against that lock file.
-The initial consumer check caught Compiz's missing installed library search
-path; the package now supplies an install RPATH for its libraries and plugins.
-The CMake probe still prints a warning about `uuid.pc` during optional static
-dependency discovery. Shared-library discovery, linking, executable startup
-and the required plugin library checks pass; static linking is not validated.
+```sh
+nix build path:.#nixosConfigurations.unity-test.config.system.build.vm
+./result/bin/run-unity-test-vm
+```
 
-Next: package Unity's missing small libraries and settings daemon, then build
-the shell against this foundation. The diagnostic VM remains a session-wiring
-test until a real `unity-session` runtime replaces its fixture.
+The VM uses an unprivileged `tester` account, password `test-only`, with automatic
+login. These credentials apply only to the VM. SSH is forwarded from host
+`127.0.0.1:2222` to the guest. The VM creates `unity-test.qcow2` in the launch
+directory. Hardware virtualization is recommended; QEMU falls back to software
+emulation when KVM is unavailable.
+
+For package and smoke checks:
+
+```sh
+nix build path:.#unity-session
+nix flake check path:.
+```
+
+The checks cover disabled-module isolation, session/PAM registration, patched
+AccountsService integration, Compiz/Nux interfaces, and a software-rendered X11
+Unity shell. The shell check requires actual launcher and panel windows and
+rejects a failed unityshell plugin load. It does not establish complete login,
+lock-screen, indicator, or application-search functionality.
+
+Use `path:.` while files are untracked: Git-backed flakes otherwise omit them.
+
+## Included components
+
+| Component | Packaging status |
+| --- | --- |
+| Unity 7.7.1 shell, launcher, Dash, panel and lock screen | Builds; shell renders in graphical smoke test |
+| Compiz 0.9.14.2 and Nux 4.0.8 | Built with modern compiler/library fixes |
+| Unity settings daemon and control center | Built; runtime panel checks pending |
+| HUD and GTK global menu module | Built; application integration checks pending |
+| Application, sound, power, session, clock, keyboard, Bluetooth and messages indicators | Built and supervised with the Unity session |
+| Home, applications, files, music, local video and Shotwell photo scopes | Built; search checks pending |
+| BAMF application matching and Zeitgeist history | Included; runtime checks pending |
+| Unity greeter | Built; LightDM integration pending |
+| Nemo desktop, NetworkManager applet, polkit and notifications | Included |
+| Ambiance theme, Ubuntu icons and fonts | Included |
+
+The module configures session-specific user services, D-Bus, dconf, the Unity PAM
+service, graphics, keyring, storage/power services, and default NetworkManager and
+PipeWire support. It uses Ubuntu's AccountsService extensions while retaining
+NixOS account-management patches. Session environment variables are imported at
+login and restored when the session ends.
+
+## Sources and compatibility
+
+Unity comes from [Ubuntu Unity's source repository](https://gitlab.com/ubuntu-unity/unity/unity)
+at commit `6f01ccb7395ca0fb3ee5f220263d9704a18ce194`. The session definition comes
+from its `unity-session` project at commit
+`32c2fd569b0d51e40bd3ec875e77f0261a744d03`. Ubuntu source package versions, download
+URLs and hashes are recorded in `pkgs/sources.json`; each recipe applies the
+relevant Debian patch series. Nixpkgs dependencies are pinned by `flake.lock`.
+
+Compatibility changes include Nix store installation paths, cross-package
+indicator discovery, Ubuntu GTK extensions, AccountsService APIs, current
+GLib/GCC/CMake compatibility, service launchers, and schema assembly.
+
+Current omissions and limits:
+
+- Retired remote video and online photo providers are not installed. Local video
+  and Shotwell photo providers are packaged. Removed web services cannot be
+  restored by packaging their old clients.
+- Ubuntu APT software suggestions are disabled; installed-application search is
+  retained. Nix software discovery has not been implemented.
+- The control center's legacy online-accounts and webcam-capture integrations
+  are omitted. IBus support is built; FCITX control-center integration is disabled.
+- Compiz's old Python settings GUI, optional protobuf cache and separate GTK
+  window decorator are omitted. Unity supplies its own window decorations.
+- This is an X11 desktop, with no Wayland session or non-NixOS integration.
+- Real login, logout cleanup, lock/unlock, global menus, multimedia controls,
+  local search and hardware behavior need completion of the VM/hardware checks.
+
+Build success is recorded separately from runtime verification throughout this
+project. Do not use the current snapshot as your only desktop session.

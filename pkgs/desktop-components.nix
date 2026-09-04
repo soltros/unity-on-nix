@@ -171,6 +171,7 @@ in rec {
   };
   unity-control-center = auto "unity-control-center" {
     postPatch = ''
+      substituteInPlace panels/network/connection-editor/net-connection-editor.c --replace-fail 'editor->parent_window = g_object_ref (parent_window);' 'editor->parent_window = GTK_WIDGET (g_object_ref (parent_window));'
       substituteInPlace panels/printers/pp-new-printer.c --replace-fail 'g_dbus_connection_call (g_object_ref (source_object),' 'g_dbus_connection_call (G_DBUS_CONNECTION (g_object_ref (source_object)),'
       substituteInPlace panels/bluetooth/gnome-bluetooth/lib/bluetooth-client.c --replace-fail 'model = g_object_ref(priv->store);' 'model = GTK_TREE_MODEL (g_object_ref (priv->store));'
       substituteInPlace panels/user-accounts/um-realm-manager.c --replace-fail 'discover->manager = g_object_ref (self);' 'discover->manager = G_DBUS_OBJECT_MANAGER (g_object_ref (self));'

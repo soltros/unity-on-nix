@@ -6,7 +6,8 @@ let
     gsettings-desktop-schemas-unity gsettings-ubuntu-schemas
     unity compiz nux libunity unity-settings-daemon unity-control-center unity-greeter
     unity-asset-pool unity-gtk-module bamf-session hud unity-scope-home unity-lens-applications
-    unity-lens-files indicator-appmenu indicator-application indicator-sound
+    unity-lens-files unity-lens-music unity-lens-video unity-lens-photos
+    indicator-appmenu indicator-application indicator-sound
     indicator-power indicator-session indicator-datetime indicator-keyboard
     indicator-bluetooth indicator-messages
   ] ++ (with pkgs; [
@@ -52,6 +53,8 @@ let
     color-shading-type='vertical'
     [com.canonical.Unity.Launcher]
     favorites=['application://nemo.desktop', 'application://xterm.desktop', 'application://unity-control-center.desktop', 'unity://running-apps', 'unity://devices']
+    [com.canonical.Unity.ApplicationsLens]
+    display-available-apps=false
     EOF
     glib-compile-schemas --strict $out/share/glib-2.0/schemas
   '';
@@ -71,9 +74,30 @@ in pkgs.stdenvNoCC.mkDerivation {
     substitute unity.desktop $out/share/xsessions/unity.desktop \
       --replace-fail '/usr/bin/unity-session' "$out/bin/unity-session" \
       --replace-fail '/usr/bin/unity' "$out/bin/unity-session"
-    cat >$out/bin/unity-session <<EOF
+    cat >$out/bin/unity-session <<'EOF'
     #!${pkgs.bash}/bin/bash
     set -euo pipefail
+    managed=(XDG_CURRENT_DESKTOP DESKTOP_SESSION GDMSESSION GNOME_DESKTOP_SESSION_ID
+      COMPIZ_CONFIG_PROFILE COMPIZ_CONFIG_DIR COMPIZ_PLUGIN_DIR UNITY_INDICATOR_DIR
+      UNITY_INDICATOR_SERVICE_DIR GSETTINGS_SCHEMA_DIR GDK_PIXBUF_MODULE_FILE
+      XDG_DATA_DIRS XDG_CONFIG_DIRS PATH GTK_MODULES GTK_PATH LD_LIBRARY_PATH)
+    declare -A previous present
+    for name in "''${managed[@]}"; do
+      previous[$name]="''${!name-}"
+      if [[ -v $name ]]; then present[$name]=yes; else present[$name]=no; fi
+    done
+    cleanup() {
+      ${pkgs.systemd}/bin/systemctl --user stop unity-session.target || true
+      local restored=() unset_names=()
+      for name in "''${managed[@]}"; do
+        restored+=("$name=''${previous[$name]}")
+        if [[ ''${present[$name]} == no ]]; then unset_names+=("$name"); fi
+      done
+      ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd "''${restored[@]}" || true
+      if (( ''${#unset_names[@]} )); then
+        ${pkgs.systemd}/bin/systemctl --user unset-environment "''${unset_names[@]}" || true
+      fi
+    }
     export XDG_CURRENT_DESKTOP=Unity:Unity7:ubuntu
     export DESKTOP_SESSION=ubuntu
     export GDMSESSION=unity
@@ -85,20 +109,23 @@ in pkgs.stdenvNoCC.mkDerivation {
     export UNITY_INDICATOR_DIR=${indicators}/lib/indicators3/7
     export UNITY_INDICATOR_SERVICE_DIR=${indicators}/share/unity/indicators
     export GSETTINGS_SCHEMA_DIR=${schemas}/share/glib-2.0/schemas
-    export XDG_DATA_DIRS=$out/share:${data}/share:\''${XDG_DATA_DIRS:-/run/current-system/sw/share}
-    export XDG_CONFIG_DIRS=${u.unity-settings-daemon}/etc/xdg:\''${XDG_CONFIG_DIRS:-/etc/xdg}
-    export PATH=${lib.makeBinPath components}:\$PATH
+    export XDG_DATA_DIRS=@out@/share:${data}/share:''${XDG_DATA_DIRS:-/run/current-system/sw/share}
+    export XDG_CONFIG_DIRS=${u.unity-settings-daemon}/etc/xdg:''${XDG_CONFIG_DIRS:-/etc/xdg}
+    export PATH=${lib.makeBinPath components}:$PATH
     export GTK_MODULES=unity-gtk-module
     export GTK_PATH=${u.unity-gtk-module}/lib/gtk-3.0
-    export LD_LIBRARY_PATH=${u.gtk3-unity}/lib:\''${LD_LIBRARY_PATH:-}
+    export LD_LIBRARY_PATH=${u.gtk3-unity}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
     ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd \
       DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP DESKTOP_SESSION GDMSESSION GNOME_DESKTOP_SESSION_ID GDK_PIXBUF_MODULE_FILE \
       COMPIZ_CONFIG_PROFILE COMPIZ_CONFIG_DIR COMPIZ_PLUGIN_DIR UNITY_INDICATOR_DIR \
       UNITY_INDICATOR_SERVICE_DIR GSETTINGS_SCHEMA_DIR XDG_DATA_DIRS XDG_CONFIG_DIRS PATH GTK_MODULES GTK_PATH LD_LIBRARY_PATH
-    trap '${pkgs.systemd}/bin/systemctl --user stop unity-session.target' EXIT
-    ${pkgs.systemd}/bin/systemctl --user reset-failed unity-session.target unity-session-manager.service unity-shell.service
+    trap cleanup EXIT
+    trap 'exit 0' HUP INT TERM
+    ${pkgs.systemd}/bin/systemctl --user reset-failed unity-session.target unity-session-manager.service unity-shell.service || true
     ${pkgs.systemd}/bin/systemctl --user start --wait unity-session.target
     EOF
+    substituteInPlace $out/bin/unity-session --replace-fail '@out@' "$out"
+    ${pkgs.bash}/bin/bash -n $out/bin/unity-session
     chmod +x $out/bin/unity-session
     runHook postInstall
   '';
