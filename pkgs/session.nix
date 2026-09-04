@@ -14,7 +14,7 @@ let
   ] ++ (with pkgs; [
     cinnamon-desktop libgnomekbd ibus glib.bin nemo lxappearance
     zeitgeist notify-osd networkmanagerapplet polkit_gnome
-    ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts xterm
+    ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts kitty
   ]);
   data = pkgs.buildEnv {
     name = "unity-session-data";
@@ -48,7 +48,7 @@ let
     icon-theme='ubuntu-mono-dark'
     font-name='Ubuntu 11'
     [org.gnome.desktop.default-applications.terminal]
-    exec='xterm'
+    exec='kitty'
     exec-arg='-e'
     [org.gnome.desktop.background]
     picture-uri=""
@@ -99,13 +99,13 @@ in pkgs.stdenvNoCC.mkDerivation {
     [Desktop Entry]
     Name=Terminal
     Comment=Use the command line
-    Exec=${pkgs.xterm}/bin/xterm
+    Exec=${pkgs.kitty}/bin/kitty
     Icon=utilities-terminal
     Terminal=false
     Type=Application
     Categories=System;TerminalEmulator;
     StartupNotify=true
-    StartupWMClass=XTerm
+    StartupWMClass=kitty
     EOF
     cat >$out/share/applications/unity-appearance.desktop <<EOF
     [Desktop Entry]
@@ -159,7 +159,9 @@ in pkgs.stdenvNoCC.mkDerivation {
         ${pkgs.systemd}/bin/systemctl --user unset-environment "''${unset_names[@]}" || true
       fi
     }
-    export XDG_CURRENT_DESKTOP=Unity:Unity7:ubuntu
+    # Put Unity7 first: several desktop-menu consumers use the first token
+    # when evaluating OnlyShowIn, and Unity's own panels target Unity7.
+    export XDG_CURRENT_DESKTOP=Unity7:Unity:ubuntu
     export DESKTOP_SESSION=ubuntu
     export GDMSESSION=unity
     export GDK_PIXBUF_MODULE_FILE=${pkgs.librsvg}/${pkgs.gdk-pixbuf.binaryDir}/loaders.cache

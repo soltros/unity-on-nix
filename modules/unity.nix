@@ -78,7 +78,10 @@ in {
       pulse.enable = lib.mkDefault true;
     };
     fonts.packages = [ pkgs.ubuntu-classic pkgs.dejavu_fonts ];
-    environment.systemPackages = [ runtime ] ++ runtime.components ++ cfg.extraPackages;
+    environment.systemPackages =
+      [ runtime pkgs.bubblewrap ]
+      ++ runtime.components
+      ++ cfg.extraPackages;
     environment.pathsToLink = [ "/share/unity" "/share/accountsservice" ];
     systemd.user.targets.unity-session = {
       description = "Unity desktop session";
