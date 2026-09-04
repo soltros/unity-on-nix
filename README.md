@@ -99,7 +99,7 @@ Use `path:.` while files are untracked: Git-backed flakes otherwise omit them.
 | Ambiance theme, Ubuntu icons and fonts | Included |
 
 The module configures session-specific user services, D-Bus, dconf, the Unity PAM
-service, graphics, keyring, storage/power services, and default NetworkManager and
+service, graphics, keyring, GTK desktop portals, storage/power services, and default NetworkManager and
 PipeWire support. It uses Ubuntu's AccountsService extensions while retaining
 NixOS account-management patches. Session environment variables are imported at
 login and restored when the session ends.

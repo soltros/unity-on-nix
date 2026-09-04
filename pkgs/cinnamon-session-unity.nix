@@ -8,6 +8,11 @@ pkgs.cinnamon-session.overrideAttrs (old: {
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${pkgs.cinnamon-desktop}/share")
   '';
   postPatch = (old.postPatch or "") + ''
+    substituteInPlace cinnamon-session/csm-manager.c \
+      --replace-fail '"org.cinnamon.settings-daemon.plugins.power"' '"org.gnome.desktop.screensaver"' \
+      --replace-fail '"lock-on-suspend"' '"ubuntu-lock-on-suspend"'
+    substituteInPlace cinnamon-session/csm-manager.c \
+      --replace-fail 'cinnamon-screensaver-command --lock' '${pkgs.glib}/bin/gdbus call --session --dest org.gnome.ScreenSaver --object-path /org/gnome/ScreenSaver --method org.gnome.ScreenSaver.Lock'
     # Let GLib interpret the colon-separated XDG_CURRENT_DESKTOP list. Passing
     # "Unity:Unity7:ubuntu" as one desktop name skips Unity's settings daemon.
     substituteInPlace cinnamon-session/csm-autostart-app.c \

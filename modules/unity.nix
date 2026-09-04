@@ -67,6 +67,11 @@ in {
     security.polkit.enable = true;
     security.pam.services.unity = {};
     programs.dconf.enable = true;
+    xdg.portal = {
+      enable = lib.mkDefault true;
+      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+      config.unity.default = [ "gtk" ];
+    };
     services.pipewire = {
       enable = lib.mkDefault true;
       alsa.enable = lib.mkDefault true;
@@ -86,6 +91,7 @@ in {
         after = [ "graphical-session-pre.target" "unity-panel.service" ];
       };
       unity-panel = sessionService "Unity panel service" "${u.unity}/lib/unity/unity-panel-service";
+      unity-ibus = sessionService "Unity input methods" "${pkgs.ibus}/bin/ibus-daemon --xim";
       unity-hud = sessionService "Unity HUD" "${u.hud}/libexec/hud/hud-service";
       unity-nemo = sessionService "Unity desktop icons" "${pkgs.nemo}/bin/nemo-desktop";
       unity-network = sessionService "Unity network indicator" "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator";

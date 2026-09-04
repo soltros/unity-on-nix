@@ -27,7 +27,7 @@ let
     paths = with u; [ indicator-appmenu indicator-application indicator-sound
       indicator-power indicator-session indicator-datetime indicator-keyboard
       indicator-bluetooth indicator-messages ];
-    pathsToLink = [ "/lib/indicators3" "/share/unity/indicators" ];
+    pathsToLink = [ "/lib/indicators" "/share/unity/indicators" ];
   };
   schemas = pkgs.runCommand "unity-session-schemas" { nativeBuildInputs = [ pkgs.glib ]; } ''
     mkdir -p $out/share/glib-2.0/schemas
@@ -70,6 +70,17 @@ in pkgs.stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin $out/share/xsessions $out/share/cinnamon-session/sessions $out/share/nemo/actions
+    mkdir -p $out/etc/xdg/autostart
+    # These are supervised by the Unity target, not launched a second time
+    # by the XDG autostart reader in the session manager.
+    for entry in indicator-application indicator-messages nm-applet polkit-gnome-authentication-agent-1; do
+      cat >$out/etc/xdg/autostart/$entry.desktop <<AUTOSTART
+    [Desktop Entry]
+    Type=Application
+    Name=$entry
+    Hidden=true
+    AUTOSTART
+    done
     cp unity.session $out/share/cinnamon-session/sessions/
     cp *.nemo_action $out/share/nemo/actions/
     substitute unity.desktop $out/share/xsessions/unity.desktop \
@@ -81,7 +92,7 @@ in pkgs.stdenvNoCC.mkDerivation {
     managed=(XDG_CURRENT_DESKTOP DESKTOP_SESSION GDMSESSION GNOME_DESKTOP_SESSION_ID
       COMPIZ_CONFIG_PROFILE COMPIZ_CONFIG_DIR COMPIZ_PLUGIN_DIR COMPIZ_METADATA_PATH UNITY_INDICATOR_DIR
       UNITY_INDICATOR_SERVICE_DIR GSETTINGS_SCHEMA_DIR GDK_PIXBUF_MODULE_FILE
-      XDG_DATA_DIRS XDG_CONFIG_DIRS PATH GTK_MODULES GTK_PATH LD_LIBRARY_PATH)
+      XDG_DATA_DIRS XDG_CONFIG_DIRS PATH GTK_MODULES GTK_PATH GTK_DATA_PREFIX LD_LIBRARY_PATH)
     declare -A previous present
     for name in "''${managed[@]}"; do
       previous[$name]="''${!name-}"
@@ -108,19 +119,20 @@ in pkgs.stdenvNoCC.mkDerivation {
     export COMPIZ_CONFIG_DIR=${u.unity}/etc/compizconfig
     export COMPIZ_METADATA_PATH=${u.unity}/share/compiz
     export COMPIZ_PLUGIN_DIR=${u.unity}/lib/compiz:${u.compiz}/lib/compiz
-    export UNITY_INDICATOR_DIR=${indicators}/lib/indicators3/7
+    export UNITY_INDICATOR_DIR=${indicators}/lib/indicators/3
     export UNITY_INDICATOR_SERVICE_DIR=${indicators}/share/unity/indicators
     export GSETTINGS_SCHEMA_DIR=${schemas}/share/glib-2.0/schemas
     export XDG_DATA_DIRS=@out@/share:${data}/share:''${XDG_DATA_DIRS:-/run/current-system/sw/share}
-    export XDG_CONFIG_DIRS=${u.unity-settings-daemon}/etc/xdg:''${XDG_CONFIG_DIRS:-/etc/xdg}
+    export XDG_CONFIG_DIRS=@out@/etc/xdg:${u.unity-settings-daemon}/etc/xdg:''${XDG_CONFIG_DIRS:-/etc/xdg}
     export PATH=${lib.makeBinPath components}:$PATH
+    export GTK_DATA_PREFIX=${data}
     export GTK_MODULES=unity-gtk-module
     export GTK_PATH=${u.unity-gtk-module}/lib/gtk-3.0
     export LD_LIBRARY_PATH=${u.gtk3-unity}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
     ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd \
       DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP DESKTOP_SESSION GDMSESSION GNOME_DESKTOP_SESSION_ID GDK_PIXBUF_MODULE_FILE \
       COMPIZ_CONFIG_PROFILE COMPIZ_CONFIG_DIR COMPIZ_PLUGIN_DIR COMPIZ_METADATA_PATH UNITY_INDICATOR_DIR \
-      UNITY_INDICATOR_SERVICE_DIR GSETTINGS_SCHEMA_DIR XDG_DATA_DIRS XDG_CONFIG_DIRS PATH GTK_MODULES GTK_PATH LD_LIBRARY_PATH
+      UNITY_INDICATOR_SERVICE_DIR GSETTINGS_SCHEMA_DIR XDG_DATA_DIRS XDG_CONFIG_DIRS PATH GTK_MODULES GTK_PATH GTK_DATA_PREFIX LD_LIBRARY_PATH
     trap cleanup EXIT
     trap 'exit 0' HUP INT TERM
     ${pkgs.systemd}/bin/systemctl --user reset-failed unity-session.target unity-shell.service || true

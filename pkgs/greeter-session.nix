@@ -9,7 +9,7 @@ let
     export XDG_DATA_DIRS=${session.data}/share:''${XDG_DATA_DIRS:-/run/current-system/sw/share}
     export LD_LIBRARY_PATH=${u.gtk3-unity}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
     export GDK_PIXBUF_MODULE_FILE=${pkgs.librsvg}/${pkgs.gdk-pixbuf.binaryDir}/loaders.cache
-    export UNITY_INDICATOR_DIR=${session.indicators}/lib/indicators3/7
+    export UNITY_INDICATOR_DIR=${session.indicators}/lib/indicators/3
     export UNITY_INDICATOR_SERVICE_DIR=${session.indicators}/share/unity/indicators
     export PATH=${pkgs.lib.makeBinPath [ pkgs.networkmanagerapplet pkgs.coreutils pkgs.glib ]}:$PATH
     children=()

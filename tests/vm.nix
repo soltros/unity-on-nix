@@ -11,7 +11,7 @@
   users.users.tester = {
     isNormalUser = true;
     initialPassword = "test-only";
-    extraGroups = [ "networkmanager" ];
+    extraGroups = [ "networkmanager" "systemd-journal" ];
   };
   environment.systemPackages = [ pkgs.xterm pkgs.xdotool ];
   # Test credentials and automatic login are confined to this VM.
