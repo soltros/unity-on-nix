@@ -1,0 +1,112 @@
+{ pkgs, unityPackages }:
+let
+  inherit (pkgs) lib;
+  u = unityPackages;
+  components = with u; [
+    gsettings-desktop-schemas-unity gsettings-ubuntu-schemas
+    unity compiz nux libunity unity-settings-daemon unity-control-center unity-greeter
+    unity-asset-pool unity-gtk-module bamf-session hud unity-scope-home unity-lens-applications
+    unity-lens-files indicator-appmenu indicator-application indicator-sound
+    indicator-power indicator-session indicator-datetime indicator-keyboard
+    indicator-bluetooth indicator-messages
+  ] ++ (with pkgs; [
+    cinnamon-session cinnamon-desktop cinnamon-settings-daemon nemo
+    zeitgeist notify-osd networkmanagerapplet polkit_gnome
+    ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts xterm
+  ]);
+  data = pkgs.buildEnv {
+    name = "unity-session-data";
+    paths = components;
+    pathsToLink = [ "/share" ];
+    ignoreCollisions = true;
+  };
+  indicators = pkgs.buildEnv {
+    name = "unity-indicators";
+    paths = with u; [ indicator-appmenu indicator-application indicator-sound
+      indicator-power indicator-session indicator-datetime indicator-keyboard
+      indicator-bluetooth indicator-messages ];
+    pathsToLink = [ "/lib/indicators3" "/share/unity/indicators" ];
+  };
+  schemas = pkgs.runCommand "unity-session-schemas" { nativeBuildInputs = [ pkgs.glib ]; } ''
+    mkdir -p $out/share/glib-2.0/schemas
+    ${lib.concatMapStringsSep "\n" (p: ''
+      for dir in ${p}/share/glib-2.0/schemas ${p}/share/gsettings-schemas/*/glib-2.0/schemas; do
+        if [ -d "$dir" ]; then
+          for file in "$dir"/*.xml; do
+            [ -f "$file" ] || continue
+            target="$out/share/glib-2.0/schemas/$(basename "$file")"
+            [ -e "$target" ] || cp "$file" "$target"
+          done
+        fi
+      done
+    '') components}
+    cat >$out/share/glib-2.0/schemas/90-unity-nixos.gschema.override <<'EOF'
+    [org.gnome.desktop.interface]
+    gtk-theme='Ambiance'
+    icon-theme='ubuntu-mono-dark'
+    font-name='Ubuntu 11'
+    [org.gnome.desktop.background]
+    picture-uri=""
+    primary-color='#2c001e'
+    secondary-color='#772953'
+    color-shading-type='vertical'
+    [com.canonical.Unity.Launcher]
+    favorites=['application://nemo.desktop', 'application://xterm.desktop', 'application://unity-control-center.desktop', 'unity://running-apps', 'unity://devices']
+    EOF
+    glib-compile-schemas --strict $out/share/glib-2.0/schemas
+  '';
+in pkgs.stdenvNoCC.mkDerivation {
+  pname = "unity-session";
+  version = "unstable-32c2fd5";
+  src = pkgs.fetchurl {
+    url = "https://gitlab.com/ubuntu-unity/unity/unity-session/-/archive/32c2fd569b0d51e40bd3ec875e77f0261a744d03/unity-session-32c2fd569b0d51e40bd3ec875e77f0261a744d03.tar.gz";
+    hash = "sha256-xQT3MSxArPUL8LIO7eCqjSJkF77iMDZaPUi3zl/i1iA=";
+  };
+  dontBuild = true;
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/bin $out/share/xsessions $out/share/cinnamon-session/sessions $out/share/nemo/actions
+    cp unity.session $out/share/cinnamon-session/sessions/
+    cp *.nemo_action $out/share/nemo/actions/
+    substitute unity.desktop $out/share/xsessions/unity.desktop \
+      --replace-fail '/usr/bin/unity-session' "$out/bin/unity-session" \
+      --replace-fail '/usr/bin/unity' "$out/bin/unity-session"
+    cat >$out/bin/unity-session <<EOF
+    #!${pkgs.bash}/bin/bash
+    set -euo pipefail
+    export XDG_CURRENT_DESKTOP=Unity:Unity7:ubuntu
+    export DESKTOP_SESSION=ubuntu
+    export GDMSESSION=unity
+    export GDK_PIXBUF_MODULE_FILE=${pkgs.librsvg}/${pkgs.gdk-pixbuf.binaryDir}/loaders.cache
+    export GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+    export COMPIZ_CONFIG_PROFILE=ubuntu
+    export COMPIZ_CONFIG_DIR=${u.unity}/etc/compizconfig
+    export COMPIZ_PLUGIN_DIR=${u.unity}/lib/compiz:${u.compiz}/lib/compiz
+    export UNITY_INDICATOR_DIR=${indicators}/lib/indicators3/7
+    export UNITY_INDICATOR_SERVICE_DIR=${indicators}/share/unity/indicators
+    export GSETTINGS_SCHEMA_DIR=${schemas}/share/glib-2.0/schemas
+    export XDG_DATA_DIRS=$out/share:${data}/share:\''${XDG_DATA_DIRS:-/run/current-system/sw/share}
+    export XDG_CONFIG_DIRS=${u.unity-settings-daemon}/etc/xdg:\''${XDG_CONFIG_DIRS:-/etc/xdg}
+    export PATH=${lib.makeBinPath components}:\$PATH
+    export GTK_MODULES=unity-gtk-module
+    export GTK_PATH=${u.unity-gtk-module}/lib/gtk-3.0
+    export LD_LIBRARY_PATH=${u.gtk3-unity}/lib:\''${LD_LIBRARY_PATH:-}
+    ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd \
+      DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP DESKTOP_SESSION GDMSESSION GNOME_DESKTOP_SESSION_ID GDK_PIXBUF_MODULE_FILE \
+      COMPIZ_CONFIG_PROFILE COMPIZ_CONFIG_DIR COMPIZ_PLUGIN_DIR UNITY_INDICATOR_DIR \
+      UNITY_INDICATOR_SERVICE_DIR GSETTINGS_SCHEMA_DIR XDG_DATA_DIRS XDG_CONFIG_DIRS PATH GTK_MODULES GTK_PATH LD_LIBRARY_PATH
+    trap '${pkgs.systemd}/bin/systemctl --user stop unity-session.target' EXIT
+    ${pkgs.systemd}/bin/systemctl --user reset-failed unity-session.target unity-session-manager.service unity-shell.service
+    ${pkgs.systemd}/bin/systemctl --user start --wait unity-session.target
+    EOF
+    chmod +x $out/bin/unity-session
+    runHook postInstall
+  '';
+  passthru = { inherit components schemas data indicators; providedSessions = [ "unity" ]; };
+  meta = {
+    description = "Unity 7 desktop session for NixOS";
+    homepage = "https://gitlab.com/ubuntu-unity/unity/unity-session";
+    license = lib.licenses.gpl2Plus;
+    platforms = [ "x86_64-linux" ];
+  };
+}

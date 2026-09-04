@@ -18,6 +18,13 @@ stdenv.mkDerivation {
     libxdmcp libxau ];
   buildInputs = [ libpng libjpeg cairo librsvg dbus dbus-glib pango libnotify ];
   postPatch = ''
+    # Unity's profiles live in a separate package, not in Compiz's prefix.
+    substituteInPlace compizconfig/libcompizconfig/src/ccs_config_file.c \
+      --replace-fail 'configDir = CONFIGDIR;' \
+        'configDir = getenv ("COMPIZ_CONFIG_DIR"); if (!configDir) configDir = CONFIGDIR;'
+    substituteInPlace compizconfig/libcompizconfig/src/main.c \
+      --replace-fail 'const char *globalProfileDir = CONFIGDIR;' \
+        'const char *globalProfileDir = getenv ("COMPIZ_CONFIG_DIR"); if (!globalProfileDir) globalProfileDir = CONFIGDIR;'
     # A package must not install into systemd's immutable store output.
     substituteInPlace CMakeLists.txt --replace-fail \
       'pkg_get_variable(SYSTEMD_USERUNITDIR systemd systemduserunitdir)' \

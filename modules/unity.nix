@@ -1,57 +1,95 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.services.desktopManager.unityExperimental;
-  session = pkgs.runCommand "unity-experimental-session" {
-    passthru.providedSessions = [ "unity-experimental" ];
-  } ''
-    mkdir -p $out/share/xsessions
-    cat > $out/share/xsessions/unity-experimental.desktop <<EOF
-    [Desktop Entry]
-    Type=Application
-    Name=Unity (experimental)
-    Comment=Isolated Unity 7 port experiment
-    Exec=${cfg.runtimePackage}/bin/unity-session
-    TryExec=${cfg.runtimePackage}/bin/unity-session
-    DesktopNames=Unity;
-    EOF
-  '';
+  cfg = config.services.desktopManager.unity;
+  u = import ../pkgs { inherit pkgs; };
+  runtime = cfg.package;
+  sessionService = description: command: {
+    inherit description;
+    wantedBy = [ "unity-session.target" ];
+    partOf = [ "unity-session.target" ];
+    after = [ "graphical-session-pre.target" ];
+    serviceConfig = { ExecStart = command; Restart = "on-failure"; RestartSec = 2; };
+  };
+  indicatorNames = [ "application" "sound" "power" "session" "datetime" "keyboard" "bluetooth" "messages" ];
 in {
-  options.services.desktopManager.unityExperimental = {
-    enable = lib.mkEnableOption "the experimental Unity 7 desktop session";
-    runtimePackage = lib.mkOption {
-      type = lib.types.nullOr lib.types.package;
-      default = null;
-      description = ''
-        A packaged Unity 7 runtime providing bin/unity-session. Its wrapper
-        must initialize and supervise Compiz 0.9, Unity services, settings,
-        schemas and plugin discovery, and clean up on logout. No working
-        runtime is supplied yet; enabling without one fails evaluation.
-      '';
+  options.services.desktopManager.unity = {
+    enable = lib.mkEnableOption "the Unity 7 X11 desktop";
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = u.unity-session;
+      defaultText = lib.literalExpression "unity-on-nix.packages.x86_64-linux.unity-session";
+      description = "Unity session package, including its runtime components.";
     };
-    supportPackages = lib.mkOption {
+    extraPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
       default = [];
-      description = "Additional Unity D-Bus services, schemas and runtime data packages.";
+      description = "Additional desktop applications and session D-Bus services.";
     };
   };
-
-  config = lib.mkIf cfg.enable (lib.mkMerge [
-    {
-      assertions = [{
-        assertion = cfg.runtimePackage != null;
-        message = "Unity experimental requires runtimePackage: the Unity 7/Compiz 0.9 runtime is not packaged yet. See the separate unity-nixos README.";
-      }];
-      services.xserver.enable = true;
-      services.dbus.enable = true;
-      programs.dconf.enable = true;
-      security.polkit.enable = true;
-      # Unity's UserAuthenticatorPam.cpp calls pam_start("unity", ...).
-      security.pam.services.unity = {};
-    }
-    (lib.mkIf (cfg.runtimePackage != null) {
-      services.displayManager.sessionPackages = [ session ];
-      environment.systemPackages = [ cfg.runtimePackage ] ++ cfg.supportPackages;
-      services.dbus.packages = [ cfg.runtimePackage ] ++ cfg.supportPackages;
-    })
-  ]);
+  config = lib.mkIf cfg.enable {
+    assertions = [{
+      assertion = pkgs.stdenv.hostPlatform.system == "x86_64-linux";
+      message = "The Unity port currently supports x86_64-linux only.";
+    }];
+    # Retain NixOS account-management safeguards with Ubuntu's extra APIs.
+    nixpkgs.overlays = [(final: prev: {
+      accountsservice = (import ../pkgs/components.nix { pkgs = prev; }).accountsservice-unity;
+    })];
+    services.xserver.enable = true;
+    services.xserver.updateDbusEnvironment = true;
+    services.displayManager.sessionPackages = [ runtime ];
+    services.displayManager.defaultSession = lib.mkDefault "unity";
+    services.dbus.enable = true;
+    services.dbus.packages = runtime.components ++ cfg.extraPackages;
+    services.accounts-daemon.enable = true;
+    services.gnome.at-spi2-core.enable = true;
+    services.gnome.gnome-keyring.enable = true;
+    services.gnome.evolution-data-server.enable = true;
+    services.gnome.glib-networking.enable = true;
+    services.gvfs.enable = true;
+    services.udisks2.enable = true;
+    services.upower.enable = true;
+    services.colord.enable = true;
+    services.libinput.enable = true;
+    networking.networkmanager.enable = lib.mkDefault true;
+    hardware.graphics.enable = true;
+    security.polkit.enable = true;
+    security.pam.services.unity = {};
+    programs.dconf.enable = true;
+    services.pipewire = {
+      enable = lib.mkDefault true;
+      alsa.enable = lib.mkDefault true;
+      pulse.enable = lib.mkDefault true;
+    };
+    fonts.packages = [ pkgs.ubuntu-classic pkgs.dejavu_fonts ];
+    environment.systemPackages = [ runtime ] ++ runtime.components ++ cfg.extraPackages;
+    environment.pathsToLink = [ "/share/unity" "/share/accountsservice" ];
+    systemd.user.targets.unity-session = {
+      description = "Unity desktop session";
+      requires = [ "graphical-session-pre.target" ];
+      bindsTo = [ "graphical-session.target" "unity-session-manager.service" ];
+      after = [ "graphical-session-pre.target" ];
+    };
+    systemd.user.services = {
+      unity-session-manager = (sessionService "Unity session manager"
+        "${pkgs.cinnamon-session}/bin/cinnamon-session --session=unity") // {
+          serviceConfig = {
+            ExecStart = "${pkgs.cinnamon-session}/bin/cinnamon-session --session=unity";
+            Restart = "no";
+          };
+        };
+      unity-shell = (sessionService "Unity shell" "${u.compiz}/bin/compiz --replace ccp") // {
+        after = [ "graphical-session-pre.target" "unity-session-manager.service" "unity-panel.service" ];
+      };
+      unity-panel = sessionService "Unity panel service" "${u.unity}/lib/unity/unity-panel-service";
+      unity-hud = sessionService "Unity HUD" "${u.hud}/libexec/hud/hud-service";
+      unity-nemo = sessionService "Unity desktop icons" "${pkgs.nemo}/bin/nemo-desktop";
+      unity-network = sessionService "Unity network indicator" "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator";
+      unity-polkit = sessionService "Unity authentication agent" "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+    } // lib.listToAttrs (map (name: {
+      name = "unity-indicator-${name}";
+      value = sessionService "Unity ${name} indicator"
+        "${u."indicator-${name}"}/libexec/indicator-${name}/indicator-${name}-service";
+    }) indicatorNames);
+  };
 }

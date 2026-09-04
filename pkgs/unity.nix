@@ -23,10 +23,19 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DENABLE_UNIT_TESTS=OFF" "-DGSETTINGS_LOCALINSTALL=ON"
     "-DCMAKE_MODULE_PATH=${compiz}/share/cmake/Modules"
-    "-DCMAKE_INSTALL_RPATH=${placeholder "out"}/lib;${compiz}/lib;${compiz}/lib/compiz"
+    "-DCMAKE_INSTALL_RPATH=${lib.getLib gtk3-unity}/lib;${placeholder "out"}/lib;${compiz}/lib;${compiz}/lib/compiz"
     "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON"
   ];
   postPatch = ''
+    # The session assembles indicators from independent Nix packages.
+    python3 - <<'PY'
+from pathlib import Path
+p = Path('services/panel-service.c')
+s = p.read_text()
+for macro, env in [('INDICATORDIR', 'UNITY_INDICATOR_DIR'), ('INDICATOR_SERVICE_DIR', 'UNITY_INDICATOR_SERVICE_DIR')]:
+    s = s.replace(macro, '(g_getenv ("' + env + '") ? g_getenv ("' + env + '") : ' + macro + ')')
+p.write_text(s)
+PY
     # Force Ubuntu GTK for every linked executable, including helper tools.
     sed -i '0,/add_subdirectory/s|add_subdirectory|link_libraries("${lib.getLib gtk3-unity}/lib/libgtk-3.so")\nadd_subdirectory|' CMakeLists.txt
 

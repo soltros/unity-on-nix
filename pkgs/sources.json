@@ -468,5 +468,61 @@
       "file": "fcitx_4.2.9.9-2.1.debian.tar.xz",
       "hash": "sha256-lLhIJWGt7/M/UMkMXh+T2RcuyDsj+ExwFxVWiXvmLfA="
     }
+  },
+  "gsettings-desktop-schemas": {
+    "version": "50.0-1ubuntu2",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gsettings-desktop-schemas/gsettings-desktop-schemas_50.0.orig.tar.xz",
+      "file": "gsettings-desktop-schemas_50.0.orig.tar.xz",
+      "hash": "sha256-NY8HyyU3J2UOEygF3zxp97+QRIBAvOFxtvbyyxucN+8="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gsettings-desktop-schemas/gsettings-desktop-schemas_50.0-1ubuntu2.debian.tar.xz",
+      "file": "gsettings-desktop-schemas_50.0-1ubuntu2.debian.tar.xz",
+      "hash": "sha256-P0jBbAT1+K5udeNRX63QpQj3QHzjUMjl70zDE/rTLgY="
+    }
+  },
+  "unity-lens-music": {
+    "version": "6.9.1+16.04-0ubuntu7",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-lens-music/unity-lens-music_6.9.1+16.04.orig.tar.gz",
+      "file": "unity-lens-music_6.9.1+16.04.orig.tar.gz",
+      "hash": "sha256-/GlwxffunIE4F1zhJPLlIsLetW4d7P7wkq/7t9Rbbjc="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-lens-music/unity-lens-music_6.9.1+16.04-0ubuntu7.diff.gz",
+      "file": "unity-lens-music_6.9.1+16.04-0ubuntu7.diff.gz",
+      "hash": "sha256-431cjwet5CFZadcfX0K1e4Ue3WPd0oGUEdeju2XroGQ="
+    }
+  },
+  "unity-lens-video": {
+    "version": "0.3.15+16.04.20160212.1-0ubuntu6",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-lens-video/unity-lens-video_0.3.15+16.04.20160212.1.orig.tar.gz",
+      "file": "unity-lens-video_0.3.15+16.04.20160212.1.orig.tar.gz",
+      "hash": "sha256-Uam86wJYcFHjdPCRTGylBcEuBL87+XjqQxmjkedv2Gc="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-lens-video/unity-lens-video_0.3.15+16.04.20160212.1-0ubuntu6.diff.gz",
+      "file": "unity-lens-video_0.3.15+16.04.20160212.1-0ubuntu6.diff.gz",
+      "hash": "sha256-kspTG6UhIhDpEIYl0MNxPXzekL/6ZX4zICTOWSqao+g="
+    }
+  },
+  "unity-lens-photos": {
+    "version": "1.0+17.10.20170605-0ubuntu10",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-lens-photos/unity-lens-photos_1.0+17.10.20170605.orig.tar.gz",
+      "file": "unity-lens-photos_1.0+17.10.20170605.orig.tar.gz",
+      "hash": "sha256-7x8FKIxkO26Y1LTXuPyt/QQ+0TrlJVhMlsZc656mKbc="
+    },
+    "strip": 0,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-lens-photos/unity-lens-photos_1.0+17.10.20170605-0ubuntu10.diff.gz",
+      "file": "unity-lens-photos_1.0+17.10.20170605-0ubuntu10.diff.gz",
+      "hash": "sha256-U/5aoh+Pyga3BCn47OqZrXpj4HelKr4j39Yy8BRJCXI="
+    }
   }
 }

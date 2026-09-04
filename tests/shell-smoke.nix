@@ -4,7 +4,7 @@ let
   data = pkgs.buildEnv {
     name = "unity-smoke-data";
     paths = [ u.unity u.compiz u.libunity u.gsettings-ubuntu-schemas
-      u.unity-settings-daemon u.unity-greeter pkgs.gsettings-desktop-schemas pkgs.adwaita-icon-theme ];
+      u.unity-settings-daemon u.unity-greeter u.gsettings-desktop-schemas-unity u.bamf-session u.unity-scope-home u.unity-lens-applications u.unity-lens-files pkgs.adwaita-icon-theme ];
     pathsToLink = [ "/share" ];
     ignoreCollisions = true;
   };
@@ -22,12 +22,15 @@ in pkgs.runCommand "unity-shell-smoke" {
   for schemaDir in ${data}/share/gsettings-schemas/*; do
     export XDG_DATA_DIRS="$schemaDir:$XDG_DATA_DIRS"
   done
+  export GDK_PIXBUF_MODULE_FILE=${pkgs.librsvg}/${pkgs.gdk-pixbuf.binaryDir}/loaders.cache
   export GSETTINGS_BACKEND=memory
   export LD_LIBRARY_PATH=${u.gtk3-unity}/lib:${pkgs.mesa}/lib
   export __GLX_VENDOR_LIBRARY_NAME=mesa
   export LIBGL_ALWAYS_SOFTWARE=1
   export LIBGL_DRIVERS_PATH=${pkgs.mesa}/lib/dri
   export COMPIZ_PLUGIN_DIR=${u.unity}/lib/compiz:${u.compiz}/lib/compiz
+  export COMPIZ_CONFIG_DIR=${u.unity}/etc/compizconfig
+  export COMPIZ_CONFIG_PROFILE=ubuntu
   export DISPLAY=:99
   Xvfb :99 -screen 0 1280x800x24 +extension GLX -nolisten tcp >$out/xserver.log 2>&1 &
   xserver=$!
@@ -48,6 +51,8 @@ in pkgs.runCommand "unity-shell-smoke" {
     fi
     if grep -q "Failed to load plugin: unityshell\|Failed to start plugin: unityshell" "$out/unity.log"; then cat "$out/unity.log"; exit 1; fi
     xwininfo -root -tree >"$out/windows.txt"
+    grep -q '"unity-launcher"' "$out/windows.txt"
+    grep -q '"unity-panel"' "$out/windows.txt"
     import -window root "$out/desktop.png"
   '
 ''

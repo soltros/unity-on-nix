@@ -13,9 +13,20 @@ let
     meta = { license = lib.licenses.gpl3Plus; platforms = [ "x86_64-linux" ]; };
   } // attrs);
 in rec {
+  bamf-session = pkgs.bamf.overrideAttrs (old: {
+    postInstall = (old.postInstall or "") + ''
+      substituteInPlace $out/libexec/bamf/bamfdaemon-dbus-runner \
+        --replace-fail '#!/bin/bash' '#!${pkgs.bash}/bin/bash'
+    '';
+  });
+  gsettings-desktop-schemas-unity = pkgs.gsettings-desktop-schemas.overrideAttrs (old: {
+    pname = "gsettings-desktop-schemas-unity";
+    patches = (old.patches or []) ++ [ ./patches/ubuntu-lock-on-suspend.patch ];
+  });
   gtk3-unity = pkgs.gtk3.overrideAttrs (old: {
     pname = "gtk3-unity";
     patches = (old.patches or []) ++ [
+      ./patches/gtk/bzg_gtkcellrenderer_grabbing_modifier.patch
       ./patches/gtk/ubuntu_gtk_custom_menu_items.patch
       ./patches/gtk/x-canonical-accel.patch
       ./patches/gtk/message-dialog-restore-traditional-look-on-unity.patch
@@ -25,7 +36,8 @@ in rec {
       ./patches/gtk/unity-headerbar-maximized-mode.patch
     ];
   });
-  accountsservice-unity = pkgs.accountsservice.overrideAttrs (old: {
+  accountsservice-unity = if pkgs.accountsservice.unityPatched or false then pkgs.accountsservice else pkgs.accountsservice.overrideAttrs (old: {
+    passthru = (old.passthru or {}) // { unityPatched = true; };
     src = source "accountsservice";
     postPatch = (old.postPatch or "") + ''
       printf '#!/bin/sh\necho 23.13.9\n' > generate-version.sh
@@ -58,6 +70,8 @@ in rec {
     configureFlags = [ "--disable-gtk-doc" ];
   };
   libindicator = auto "libindicator" {
+    # Upstream installs the same headers through two Automake targets.
+    enableParallelInstalling = false;
     propagatedBuildInputs = [ gtk3-unity pkgs.glib ido ];
     configureFlags = [ "--with-gtk=3" "--disable-tests" ];
   };

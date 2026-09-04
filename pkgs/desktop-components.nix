@@ -52,6 +52,24 @@ in rec {
     buildInputs = with pkgs; [ base.libunity glib dee libgee json-glib libuuid ];
     configureFlags = [ "--enable-localinstall" "--disable-headless-tests" ];
   };
+  unity-lens-music = auto "unity-lens-music" {
+    buildInputs = with pkgs; [ base.libunity glib dee sqlite libgee json-glib libnotify
+      tdb gst_all_1.gstreamer gst_all_1.gst-plugins-base ];
+    configureFlags = [ "--enable-localinstall" ];
+  };
+  unity-lens-video = auto "unity-lens-video" {
+    # Build the local provider; the retired Ubuntu remote search client depends
+    # on unsupported libsoup 2 and is not advertised as a working service.
+    buildInputs = with pkgs; [ base.libunity glib dee libgee json-glib libzeitgeist ];
+    postPatch = ''
+      sed -i '/libsoup-gnome-2.4/d' configure.ac
+      sed -i '/^[[:space:]]*unity-scope-video-remote \\/d; /^[[:space:]]*unity_scope_video_remote.vala.stamp \\/d' src/Makefile.am
+      substituteInPlace Makefile.am --replace-fail ' tests/unit' ""
+      sed -i '/^[[:space:]]*unity-scope-video-remote.service.in \\/d' data/Makefile.am
+      substituteInPlace data/Makefile.am --replace-fail 'scope_in_files = local.scope.in remote.scope.in' 'scope_in_files = local.scope.in'
+    '';
+    configureFlags = [ "--enable-localinstall" ];
+  };
   unity-lens-files = auto "unity-lens-files" {
     buildInputs = with pkgs; [ base.libunity glib dee libgee zeitgeist ];
     configureFlags = [ "--enable-localinstall" "--disable-headless-tests" ];
@@ -132,6 +150,10 @@ in rec {
   };
   unity-control-center = auto "unity-control-center" {
     postPatch = ''
+      substituteInPlace panels/printers/pp-new-printer.c --replace-fail 'g_dbus_connection_call (g_object_ref (source_object),' 'g_dbus_connection_call (G_DBUS_CONNECTION (g_object_ref (source_object)),'
+      substituteInPlace panels/bluetooth/gnome-bluetooth/lib/bluetooth-client.c --replace-fail 'model = g_object_ref(priv->store);' 'model = GTK_TREE_MODEL (g_object_ref (priv->store));'
+      substituteInPlace panels/user-accounts/um-realm-manager.c --replace-fail 'discover->manager = g_object_ref (self);' 'discover->manager = G_DBUS_OBJECT_MANAGER (g_object_ref (self));'
+      substituteInPlace panels/user-accounts/um-account-dialog.c --replace-fail 'g_clear_pointer (&self->join_dialog, gtk_widget_destroy);' 'g_clear_pointer (&self->join_dialog, (GDestroyNotify) gtk_widget_destroy);'
       substituteInPlace panels/appearance/cc-appearance-xml.c --replace-fail 'emit_added_in_idle (xml, g_object_ref (item));' 'emit_added_in_idle (xml, G_OBJECT (g_object_ref (item)));'
       substituteInPlace shell/cc-shell-item-view.c --replace-fail 'gtk_widget_override_background_color (self,' 'gtk_widget_override_background_color (GTK_WIDGET (self),'
     '';
