@@ -4,6 +4,7 @@ let
   u = unityPackages;
   components = with u; [
     gsettings-desktop-schemas-unity gsettings-ubuntu-schemas
+    cinnamon-session-unity
     unity compiz nux libunity unity-settings-daemon unity-control-center unity-greeter
     unity-asset-pool unity-gtk-module bamf-session hud unity-scope-home unity-lens-applications
     unity-lens-files unity-lens-music unity-lens-video unity-lens-photos
@@ -11,7 +12,7 @@ let
     indicator-power indicator-session indicator-datetime indicator-keyboard
     indicator-bluetooth indicator-messages
   ] ++ (with pkgs; [
-    cinnamon-session cinnamon-desktop cinnamon-settings-daemon libgnomekbd ibus nemo
+    cinnamon-desktop libgnomekbd ibus nemo
     zeitgeist notify-osd networkmanagerapplet polkit_gnome
     ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts xterm
   ]);
@@ -122,8 +123,10 @@ in pkgs.stdenvNoCC.mkDerivation {
       UNITY_INDICATOR_SERVICE_DIR GSETTINGS_SCHEMA_DIR XDG_DATA_DIRS XDG_CONFIG_DIRS PATH GTK_MODULES GTK_PATH LD_LIBRARY_PATH
     trap cleanup EXIT
     trap 'exit 0' HUP INT TERM
-    ${pkgs.systemd}/bin/systemctl --user reset-failed unity-session.target unity-session-manager.service unity-shell.service || true
-    ${pkgs.systemd}/bin/systemctl --user start --wait unity-session.target
+    ${pkgs.systemd}/bin/systemctl --user reset-failed unity-session.target unity-shell.service || true
+    ${pkgs.systemd}/bin/systemctl --user start unity-session.target
+    # Keep the manager inside LightDM's logind session for locking and logout.
+    ${u.cinnamon-session-unity}/bin/cinnamon-session --session=unity
     EOF
     substituteInPlace $out/bin/unity-session --replace-fail '@out@' "$out"
     ${pkgs.bash}/bin/bash -n $out/bin/unity-session

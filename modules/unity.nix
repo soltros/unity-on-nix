@@ -78,19 +78,12 @@ in {
     systemd.user.targets.unity-session = {
       description = "Unity desktop session";
       requires = [ "graphical-session-pre.target" ];
-      bindsTo = [ "graphical-session.target" "unity-session-manager.service" ];
+      bindsTo = [ "graphical-session.target" ];
       after = [ "graphical-session-pre.target" ];
     };
     systemd.user.services = {
-      unity-session-manager = (sessionService "Unity session manager"
-        "${pkgs.cinnamon-session}/bin/cinnamon-session --session=unity") // {
-          serviceConfig = {
-            ExecStart = "${pkgs.cinnamon-session}/bin/cinnamon-session --session=unity";
-            Restart = "no";
-          };
-        };
       unity-shell = (sessionService "Unity shell" "${u.compiz}/bin/compiz --replace ccp") // {
-        after = [ "graphical-session-pre.target" "unity-session-manager.service" "unity-panel.service" ];
+        after = [ "graphical-session-pre.target" "unity-panel.service" ];
       };
       unity-panel = sessionService "Unity panel service" "${u.unity}/lib/unity/unity-panel-service";
       unity-hud = sessionService "Unity HUD" "${u.hud}/libexec/hud/hud-service";

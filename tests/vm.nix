@@ -7,7 +7,7 @@
   virtualisation.graphics = true;
   services.desktopManager.unity.enable = true;
   services.xserver.displayManager.lightdm.enable = true;
-  services.displayManager.autoLogin = { enable = true; user = "tester"; };
+  services.displayManager.autoLogin.enable = false;
   users.users.tester = {
     isNormalUser = true;
     initialPassword = "test-only";

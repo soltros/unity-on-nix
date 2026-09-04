@@ -35,8 +35,8 @@ inputs.unity-on-nix.nixosModules.default
 
 Select **Unity** at login. The module also sets Unity as the default session
 unless your configuration specifies another default. It does not enable automatic
-login. A display manager must be enabled separately; LightDM is used by the test VM.
-The packaged Unity greeter is not yet selected by the module.
+login. LightDM with the Unity greeter is enabled by default. To use another
+display manager, set `services.desktopManager.unity.lightdm.enable = false`.
 
 The repository is [soltros/unity-on-nix](https://github.com/soltros/unity-on-nix).
 For local development, you can instead use `path:/absolute/path/to/unity-on-nix`.
@@ -62,8 +62,8 @@ nix build path:.#nixosConfigurations.unity-test.config.system.build.vm
 ./result/bin/run-unity-test-vm
 ```
 
-The VM uses an unprivileged `tester` account, password `test-only`, with automatic
-login. These credentials apply only to the VM. SSH is forwarded from host
+The VM boots to the Unity greeter. Log in with the unprivileged `tester`
+account, password `test-only`. These credentials apply only to the VM. SSH is forwarded from host
 `127.0.0.1:2222` to the guest. The VM creates `unity-test.qcow2` in the launch
 directory. Hardware virtualization is recommended; QEMU falls back to software
 emulation when KVM is unavailable.
@@ -94,7 +94,7 @@ Use `path:.` while files are untracked: Git-backed flakes otherwise omit them.
 | Application, sound, power, session, clock, keyboard, Bluetooth and messages indicators | Built and supervised with the Unity session |
 | Home, applications, files, music, local video and Shotwell photo scopes | Built; search checks pending |
 | BAMF application matching and Zeitgeist history | Included; runtime checks pending |
-| Unity greeter | Built; LightDM integration pending |
+| Unity greeter | Built and configured in LightDM; login checks underway |
 | Nemo desktop, NetworkManager applet, polkit and notifications | Included |
 | Ambiance theme, Ubuntu icons and fonts | Included |
 
@@ -134,3 +134,8 @@ Current omissions and limits:
 
 Build success is recorded separately from runtime verification throughout this
 project. Do not use the current snapshot as your only desktop session.
+
+Cinnamon dependencies are limited to a tailored session manager, the shared
+`cinnamon-desktop` library/schemas used by that manager and Nemo, and their
+supporting libraries. The Cinnamon shell and Cinnamon settings daemon are not
+installed by this module. Unity uses its own settings daemon.

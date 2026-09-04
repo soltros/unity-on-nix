@@ -18,5 +18,8 @@ assert builtins.hasAttr "unity" enabled.config.security.pam.services;
 assert builtins.any (p: builtins.elem "unity" p.providedSessions) enabled.config.services.displayManager.sessionPackages;
 assert enabled.pkgs.accountsservice.unityPatched;
 assert builtins.elem "unity-session.target" enabled.config.systemd.user.services.unity-shell.partOf;
-assert enabled.config.systemd.user.services.unity-session-manager.serviceConfig.Restart == "no";
+assert enabled.config.services.xserver.displayManager.lightdm.enable;
+assert enabled.config.services.xserver.displayManager.lightdm.greeter.name == "unity-greeter";
+assert !enabled.config.services.xserver.displayManager.desktopManager.cinnamon.enable;
+assert !(builtins.elem enabled.pkgs.cinnamon-settings-daemon enabled.config.environment.systemPackages);
 pkgs.runCommand "unity-module-evaluation-check" {} "touch $out"
