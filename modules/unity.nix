@@ -3,6 +3,7 @@ let
   cfg = config.services.desktopManager.unity;
   u = import ../pkgs { inherit pkgs; };
   runtime = cfg.package;
+  greeter = import ../pkgs/greeter-session.nix { inherit pkgs; unityPackages = u; };
   sessionService = description: command: {
     inherit description;
     wantedBy = [ "unity-session.target" ];
@@ -14,6 +15,11 @@ let
 in {
   options.services.desktopManager.unity = {
     enable = lib.mkEnableOption "the Unity 7 X11 desktop";
+    lightdm.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable LightDM with the Unity greeter. Disable to use another display manager.";
+    };
     package = lib.mkOption {
       type = lib.types.package;
       default = u.unity-session;
@@ -36,6 +42,11 @@ in {
       accountsservice = (import ../pkgs/components.nix { pkgs = prev; }).accountsservice-unity;
     })];
     services.xserver.enable = true;
+    services.xserver.displayManager.lightdm = lib.mkIf cfg.lightdm.enable {
+      enable = true;
+      greeters.gtk.enable = false;
+      greeter = { package = greeter; name = "unity-greeter"; };
+    };
     services.xserver.updateDbusEnvironment = true;
     services.displayManager.sessionPackages = [ runtime ];
     services.displayManager.defaultSession = lib.mkDefault "unity";

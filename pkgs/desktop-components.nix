@@ -166,6 +166,15 @@ in rec {
     configureFlags = [ "--enable-localinstall" ];
   };
   unity-greeter = auto "unity-greeter" {
+    postPatch = ''
+      substituteInPlace src/menubar.vala \
+        --replace-fail 'Config.INDICATOR_FILE_DIR' '(Environment.get_variable ("UNITY_INDICATOR_SERVICE_DIR") ?? Config.INDICATOR_FILE_DIR)' \
+        --replace-fail 'Config.INDICATORDIR' '(Environment.get_variable ("UNITY_INDICATOR_DIR") ?? Config.INDICATORDIR)'
+      # The greeter wrapper owns these processes and stops them at logout.
+      substituteInPlace src/unity-greeter.vala \
+        --replace-fail 'systemctl --user start indicator-application indicator-power indicator-datetime indicator-keyboard indicator-session indicator-sound' '${pkgs.coreutils}/bin/true'
+    '';
+
     buildInputs = with pkgs; [ base.gtk3-unity base.libindicator base.ido base.unity-settings-daemon
       lightdm freetype cairo libcanberra pixman libx11 libxext ];
   };
@@ -229,7 +238,7 @@ in rec {
   hud = mkCmake "hud" {
     buildInputs = with pkgs; [ glib dee libdbusmenu base.gtk3-unity libcolumbus
       qt5.qtbase qt5.qtdeclarative dee-qt gsettings-qt libdbusmenu-qt5 python3Packages.setuptools ];
-    dontWrapQtApps = true;
+    nativeBuildInputs = with pkgs; [ cmake pkg-config gettext intltool vala python3 gobject-introspection cmakeExtras qt5.wrapQtAppsHook ];
     preConfigure = ''cmakeFlagsArray+=(-DENABLE_TESTS=OFF -DLOCAL_INSTALL=ON)'';
     postPatch = ''
       substituteInPlace data/CMakeLists.txt --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_DIR "${placeholder "out"}/lib/systemd/user")'

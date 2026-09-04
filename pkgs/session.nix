@@ -11,7 +11,7 @@ let
     indicator-power indicator-session indicator-datetime indicator-keyboard
     indicator-bluetooth indicator-messages
   ] ++ (with pkgs; [
-    cinnamon-session cinnamon-desktop cinnamon-settings-daemon nemo
+    cinnamon-session cinnamon-desktop cinnamon-settings-daemon libgnomekbd ibus nemo
     zeitgeist notify-osd networkmanagerapplet polkit_gnome
     ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts xterm
   ]);
@@ -78,7 +78,7 @@ in pkgs.stdenvNoCC.mkDerivation {
     #!${pkgs.bash}/bin/bash
     set -euo pipefail
     managed=(XDG_CURRENT_DESKTOP DESKTOP_SESSION GDMSESSION GNOME_DESKTOP_SESSION_ID
-      COMPIZ_CONFIG_PROFILE COMPIZ_CONFIG_DIR COMPIZ_PLUGIN_DIR UNITY_INDICATOR_DIR
+      COMPIZ_CONFIG_PROFILE COMPIZ_CONFIG_DIR COMPIZ_PLUGIN_DIR COMPIZ_METADATA_PATH UNITY_INDICATOR_DIR
       UNITY_INDICATOR_SERVICE_DIR GSETTINGS_SCHEMA_DIR GDK_PIXBUF_MODULE_FILE
       XDG_DATA_DIRS XDG_CONFIG_DIRS PATH GTK_MODULES GTK_PATH LD_LIBRARY_PATH)
     declare -A previous present
@@ -105,6 +105,7 @@ in pkgs.stdenvNoCC.mkDerivation {
     export GNOME_DESKTOP_SESSION_ID=this-is-deprecated
     export COMPIZ_CONFIG_PROFILE=ubuntu
     export COMPIZ_CONFIG_DIR=${u.unity}/etc/compizconfig
+    export COMPIZ_METADATA_PATH=${u.unity}/share/compiz
     export COMPIZ_PLUGIN_DIR=${u.unity}/lib/compiz:${u.compiz}/lib/compiz
     export UNITY_INDICATOR_DIR=${indicators}/lib/indicators3/7
     export UNITY_INDICATOR_SERVICE_DIR=${indicators}/share/unity/indicators
@@ -117,7 +118,7 @@ in pkgs.stdenvNoCC.mkDerivation {
     export LD_LIBRARY_PATH=${u.gtk3-unity}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
     ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd \
       DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP DESKTOP_SESSION GDMSESSION GNOME_DESKTOP_SESSION_ID GDK_PIXBUF_MODULE_FILE \
-      COMPIZ_CONFIG_PROFILE COMPIZ_CONFIG_DIR COMPIZ_PLUGIN_DIR UNITY_INDICATOR_DIR \
+      COMPIZ_CONFIG_PROFILE COMPIZ_CONFIG_DIR COMPIZ_PLUGIN_DIR COMPIZ_METADATA_PATH UNITY_INDICATOR_DIR \
       UNITY_INDICATOR_SERVICE_DIR GSETTINGS_SCHEMA_DIR XDG_DATA_DIRS XDG_CONFIG_DIRS PATH GTK_MODULES GTK_PATH LD_LIBRARY_PATH
     trap cleanup EXIT
     trap 'exit 0' HUP INT TERM
