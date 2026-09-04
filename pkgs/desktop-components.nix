@@ -57,6 +57,27 @@ in rec {
       tdb gst_all_1.gstreamer gst_all_1.gst-plugins-base ];
     configureFlags = [ "--enable-localinstall" ];
   };
+  unity-lens-photos = pkgs.stdenvNoCC.mkDerivation {
+    pname = "unity-lens-photos-local";
+    version = manifest.unity-lens-photos.version;
+    src = source "unity-lens-photos";
+    nativeBuildInputs = [ pkgs.makeWrapper pkgs.intltool ];
+    dontBuild = true;
+    installPhase = let python = pkgs.python3.withPackages (p: [ p.pygobject3 ]); in ''
+      mkdir -p $out/libexec $out/share/unity-scopes/shotwell $out/share/unity/scopes/photos $out/share/dbus-1/services
+      cp src/unity_shotwell_daemon.py $out/share/unity-scopes/shotwell/
+      makeWrapper ${python}/bin/python3 $out/libexec/unity-shotwell-scope \
+        --add-flags $out/share/unity-scopes/shotwell/unity_shotwell_daemon.py \
+        --prefix GI_TYPELIB_PATH : ${base.libunity}/lib/girepository-1.0:${pkgs.dee}/lib/girepository-1.0:${pkgs.lib.getLib pkgs.glib}/lib/girepository-1.0 \
+        --prefix LD_LIBRARY_PATH : ${base.libunity}/lib:${base.libunity}/lib/libunity:${pkgs.dee}/lib
+      intltool-merge -d -u po data/shotwell.scope.in $out/share/unity/scopes/photos/shotwell.scope
+      substituteInPlace $out/share/unity/scopes/photos/shotwell.scope \
+        --replace-fail '/usr/share/unity-scopes/shotwell/unity_shotwell_daemon.py' "$out/libexec/unity-shotwell-scope"
+      substitute data/unity-scope-shotwell.service $out/share/dbus-1/services/unity-scope-shotwell.service \
+        --replace-fail '/usr/share/unity-scopes/shotwell/unity_shotwell_daemon.py' "$out/libexec/unity-shotwell-scope"
+    '';
+    meta.description = "Local Shotwell photo search for Unity";
+  };
   unity-lens-video = auto "unity-lens-video" {
     # Build the local provider; the retired Ubuntu remote search client depends
     # on unsupported libsoup 2 and is not advertised as a working service.
