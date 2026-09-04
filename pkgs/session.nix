@@ -72,7 +72,17 @@ in pkgs.stdenvNoCC.mkDerivation {
   dontBuild = true;
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/share/applications $out/share/xsessions $out/share/cinnamon-session/sessions $out/share/nemo/actions
+    mkdir -p $out/bin $out/share/applications $out/share/unity $out/share/xsessions $out/share/cinnamon-session/sessions $out/share/nemo/actions
+    # Scope metadata is generated with each provider's own prefix, although
+    # the navigation and category artwork is supplied by Unity and its asset
+    # pool. Keep a corrected metadata copy first in XDG_DATA_DIRS so the Dash
+    # can render its real lens icons instead of generic file placeholders.
+    cp -Lr ${data}/share/unity/scopes $out/share/unity/
+    chmod -R u+w $out/share/unity/scopes
+    find $out/share/unity/scopes -type f -name '*.scope' -exec sed -E -i \
+      -e 's#Icon=/nix/store/[^/]*/share/unity/icons/#Icon=${u.unity}/share/unity/icons/#' \
+      -e 's#Icon=/nix/store/[^/]*/share/icons/unity-icon-theme/#Icon=${u.unity-asset-pool}/share/icons/unity-icon-theme/#' \
+      -e 's#group-favouritefolders\.svg#group-folders.svg#' {} +
     cat >$out/share/applications/unity-files.desktop <<EOF
     [Desktop Entry]
     Name=Files
