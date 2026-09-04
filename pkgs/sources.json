@@ -1,0 +1,472 @@
+{
+  "libunity-misc": {
+    "version": "4.0.5+14.04.20140115-0ubuntu6",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/libu/libunity-misc/libunity-misc_4.0.5+14.04.20140115.orig.tar.gz",
+      "file": "libunity-misc_4.0.5+14.04.20140115.orig.tar.gz",
+      "hash": "sha256-GX/RcHfDzqwhnL++PPpRGhfdR6hsRBw4bHvewgDRGbc="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/libu/libunity-misc/libunity-misc_4.0.5+14.04.20140115-0ubuntu6.diff.gz",
+      "file": "libunity-misc_4.0.5+14.04.20140115-0ubuntu6.diff.gz",
+      "hash": "sha256-9FplLP+Iyn8CinMI6z2pyty7oTnd5ZU+Y5Jg8XQ6LEQ="
+    }
+  },
+  "xpathselect": {
+    "version": "1.4+15.10.20150824.1-0ubuntu2",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/x/xpathselect/xpathselect_1.4+15.10.20150824.1.orig.tar.gz",
+      "file": "xpathselect_1.4+15.10.20150824.1.orig.tar.gz",
+      "hash": "sha256-1SXhcIuhD2AbE+oEw2cGKRUCXXbg002Tomip9eJQbuA="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/x/xpathselect/xpathselect_1.4+15.10.20150824.1-0ubuntu2.diff.gz",
+      "file": "xpathselect_1.4+15.10.20150824.1-0ubuntu2.diff.gz",
+      "hash": "sha256-je3bCvha/dVdG5aits258fHVk83h+l5BdweLuAG2iNY="
+    }
+  },
+  "libindicator": {
+    "version": "16.10.0+18.04.20180321.1-0ubuntu8",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/libi/libindicator/libindicator_16.10.0+18.04.20180321.1.orig.tar.gz",
+      "file": "libindicator_16.10.0+18.04.20180321.1.orig.tar.gz",
+      "hash": "sha256-ACmsOqjVozneJS9mIJtAwS5b+pByIhubMtB4RCc/Yv0="
+    },
+    "strip": 0,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/libi/libindicator/libindicator_16.10.0+18.04.20180321.1-0ubuntu8.diff.gz",
+      "file": "libindicator_16.10.0+18.04.20180321.1-0ubuntu8.diff.gz",
+      "hash": "sha256-mv+X9J97+6VJE9aGjlEbPrHKegx57yg3luxbsVvP+xk="
+    }
+  },
+  "unity-settings-daemon": {
+    "version": "15.04.1+21.10.20220802-0ubuntu6",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-settings-daemon/unity-settings-daemon_15.04.1+21.10.20220802.orig.tar.gz",
+      "file": "unity-settings-daemon_15.04.1+21.10.20220802.orig.tar.gz",
+      "hash": "sha256-0CkpcH82gUwoR5ktfUygpRFZQ0dKFo+t2eweckDWjGo="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-settings-daemon/unity-settings-daemon_15.04.1+21.10.20220802-0ubuntu6.diff.gz",
+      "file": "unity-settings-daemon_15.04.1+21.10.20220802-0ubuntu6.diff.gz",
+      "hash": "sha256-/2VO7HUpW1XRaxTBod8aJDFbWcwj0YdDvr27SnEUwsE="
+    }
+  },
+  "libunity": {
+    "version": "7.1.4+19.04.20190319-6.1ubuntu1",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/libu/libunity/libunity_7.1.4+19.04.20190319.orig.tar.gz",
+      "file": "libunity_7.1.4+19.04.20190319.orig.tar.gz",
+      "hash": "sha256-VuyzgNdL90yroZPZ6K1rDIXM+e60YbyXMcK4Y24fFJI="
+    },
+    "strip": 0,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/libu/libunity/libunity_7.1.4+19.04.20190319-6.1ubuntu1.debian.tar.xz",
+      "file": "libunity_7.1.4+19.04.20190319-6.1ubuntu1.debian.tar.xz",
+      "hash": "sha256-ESjzyyMgh+LYeNSyCaE1CRV10VkUb/9cpMC85Jfwh4Y="
+    }
+  },
+  "hud": {
+    "version": "14.10+17.10.20170619-0ubuntu6",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/h/hud/hud_14.10+17.10.20170619.orig.tar.gz",
+      "file": "hud_14.10+17.10.20170619.orig.tar.gz",
+      "hash": "sha256-PLgl8PmNrk3CbvkKHK2rgMTHvfRfPLcIJDe6EuLKKqY="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/h/hud/hud_14.10+17.10.20170619-0ubuntu6.diff.gz",
+      "file": "hud_14.10+17.10.20170619-0ubuntu6.diff.gz",
+      "hash": "sha256-IHm9gApA8Y/kYa7RcUzYkK7ZAjdUvhClZr2TsYihISs="
+    }
+  },
+  "unity-gtk-module": {
+    "version": "0.0.0+18.04.20171202-0ubuntu7",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-gtk-module/unity-gtk-module_0.0.0+18.04.20171202.orig.tar.gz",
+      "file": "unity-gtk-module_0.0.0+18.04.20171202.orig.tar.gz",
+      "hash": "sha256-WniuawIarzX1c6VseAN3OwrM3zQRLr/r0AZRvofA4o4="
+    },
+    "strip": 0,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-gtk-module/unity-gtk-module_0.0.0+18.04.20171202-0ubuntu7.diff.gz",
+      "file": "unity-gtk-module_0.0.0+18.04.20171202-0ubuntu7.diff.gz",
+      "hash": "sha256-lNfGfDCsUuOMe3xDyem8vEjiDBGD2Xy8FXSPRylKAho="
+    }
+  },
+  "unity-scope-home": {
+    "version": "6.8.2+19.04.20190412-0ubuntu8",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-scope-home/unity-scope-home_6.8.2+19.04.20190412.orig.tar.gz",
+      "file": "unity-scope-home_6.8.2+19.04.20190412.orig.tar.gz",
+      "hash": "sha256-BwrK6NzmIkDB6i+K/Mem6oBwTpXlJeKUx7DXnzLi3LE="
+    },
+    "strip": 0,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-scope-home/unity-scope-home_6.8.2+19.04.20190412-0ubuntu8.debian.tar.xz",
+      "file": "unity-scope-home_6.8.2+19.04.20190412-0ubuntu8.debian.tar.xz",
+      "hash": "sha256-qtwI2bTaLlsg9Ov2Dbt42uKL7QamMz3sQneqUHMiZIU="
+    }
+  },
+  "unity-lens-applications": {
+    "version": "7.1.0+16.10.20160927-0ubuntu8",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-lens-applications/unity-lens-applications_7.1.0+16.10.20160927.orig.tar.gz",
+      "file": "unity-lens-applications_7.1.0+16.10.20160927.orig.tar.gz",
+      "hash": "sha256-tXA6mlz91H2WReog3x3NV1cV4Rro7O86cgR9YiWiM68="
+    },
+    "strip": 0,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-lens-applications/unity-lens-applications_7.1.0+16.10.20160927-0ubuntu8.diff.gz",
+      "file": "unity-lens-applications_7.1.0+16.10.20160927-0ubuntu8.diff.gz",
+      "hash": "sha256-8OhJQSDFIuDjUe7scbPH+UzqzHlH6sYu7CIOfsrlsSg="
+    }
+  },
+  "unity-lens-files": {
+    "version": "7.1.0+17.10.20170605-0ubuntu6",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-lens-files/unity-lens-files_7.1.0+17.10.20170605.orig.tar.gz",
+      "file": "unity-lens-files_7.1.0+17.10.20170605.orig.tar.gz",
+      "hash": "sha256-8WQs3xtjg91YdxyXM7g5puhtOnk2igdwO5F0DPGPrJI="
+    },
+    "strip": 0,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-lens-files/unity-lens-files_7.1.0+17.10.20170605-0ubuntu6.diff.gz",
+      "file": "unity-lens-files_7.1.0+17.10.20170605-0ubuntu6.diff.gz",
+      "hash": "sha256-HYfmroAllZyH0YFTVBtdu4YOLJ4puY3cbqAp7fir6UA="
+    }
+  },
+  "ido": {
+    "version": "13.10.0+22.10.20221007-0ubuntu4",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/ido/ido_13.10.0+22.10.20221007.orig.tar.gz",
+      "file": "ido_13.10.0+22.10.20221007.orig.tar.gz",
+      "hash": "sha256-ZgtP6ummyMe6diUcNjbFPFOcwsKH+Scv4uyB2XqWwkE="
+    },
+    "strip": 0,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/ido/ido_13.10.0+22.10.20221007-0ubuntu4.diff.gz",
+      "file": "ido_13.10.0+22.10.20221007-0ubuntu4.diff.gz",
+      "hash": "sha256-Rm/z3RyALTA8xghCAcfAgtmjNnxpq9RuQc12ktfuGrw="
+    }
+  },
+  "ubuntu-settings": {
+    "version": "26.04.6",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/u/ubuntu-settings/ubuntu-settings_26.04.6.tar.xz",
+      "file": "ubuntu-settings_26.04.6.tar.xz",
+      "hash": "sha256-WGdnwAkiI/4TmgA5gPLUV4zrA+GoYJYLHLiZh5LELxs="
+    },
+    "strip": 1,
+    "packaging": null
+  },
+  "unity-control-center": {
+    "version": "15.04.0+23.04.20230220-0ubuntu13",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-control-center/unity-control-center_15.04.0+23.04.20230220-0ubuntu13.tar.gz",
+      "file": "unity-control-center_15.04.0+23.04.20230220-0ubuntu13.tar.gz",
+      "hash": "sha256-hDoNwAyqDN7t4jVGk983JIphK7QZ+iltuWiZSFKp2Bw="
+    },
+    "strip": 1,
+    "packaging": null
+  },
+  "indicator-appmenu": {
+    "version": "15.02.0+20.10.20260311-0ubuntu1",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-appmenu/indicator-appmenu_15.02.0+20.10.20260311-0ubuntu1.tar.gz",
+      "file": "indicator-appmenu_15.02.0+20.10.20260311-0ubuntu1.tar.gz",
+      "hash": "sha256-qS5o4XvTbNZ2wRpozp+WTz9fuUNLcQ9bzzAdcPetCvw="
+    },
+    "strip": 1,
+    "packaging": null
+  },
+  "indicator-application": {
+    "version": "12.10.1+19.04.20190308.1-0ubuntu6",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-application/indicator-application_12.10.1+19.04.20190308.1.orig.tar.gz",
+      "file": "indicator-application_12.10.1+19.04.20190308.1.orig.tar.gz",
+      "hash": "sha256-9wEyamz7b9lj05i2STU9aKzf+tn4zc3KeouMsKYNbaI="
+    },
+    "strip": 0,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-application/indicator-application_12.10.1+19.04.20190308.1-0ubuntu6.diff.gz",
+      "file": "indicator-application_12.10.1+19.04.20190308.1-0ubuntu6.diff.gz",
+      "hash": "sha256-mexR+AEBZ/KYEg6dqwJn+QhMWcUd+oJhaGT9v3InDv0="
+    }
+  },
+  "indicator-sound": {
+    "version": "12.10.2+18.10.20180612-0ubuntu7",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-sound/indicator-sound_12.10.2+18.10.20180612.orig.tar.gz",
+      "file": "indicator-sound_12.10.2+18.10.20180612.orig.tar.gz",
+      "hash": "sha256-039dsaaDvkWm9uUVYDdFGDhn7bmEygaQXhIcfTQy38I="
+    },
+    "strip": 0,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-sound/indicator-sound_12.10.2+18.10.20180612-0ubuntu7.diff.gz",
+      "file": "indicator-sound_12.10.2+18.10.20180612-0ubuntu7.diff.gz",
+      "hash": "sha256-EXi6wz6t/8pgE8/cwPuKa6SVASLbvLVtgwDPtciB3+Q="
+    }
+  },
+  "indicator-datetime": {
+    "version": "15.10+21.04.20210304-0ubuntu6",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-datetime/indicator-datetime_15.10+21.04.20210304.orig.tar.gz",
+      "file": "indicator-datetime_15.10+21.04.20210304.orig.tar.gz",
+      "hash": "sha256-Ka8QV2vi+Dp5CqDl/Z/4q6B5KCLhRc0a3LtUyYwhxqQ="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-datetime/indicator-datetime_15.10+21.04.20210304-0ubuntu6.diff.gz",
+      "file": "indicator-datetime_15.10+21.04.20210304-0ubuntu6.diff.gz",
+      "hash": "sha256-QU86lpGc6RAtcJbHdCuyz1PJ14deHiT0KibGJ2tjbTo="
+    }
+  },
+  "indicator-power": {
+    "version": "12.10.6+17.10.20170829.1-0ubuntu9",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-power/indicator-power_12.10.6+17.10.20170829.1.orig.tar.gz",
+      "file": "indicator-power_12.10.6+17.10.20170829.1.orig.tar.gz",
+      "hash": "sha256-Az3aWJcZKd4mWh3CYpMsMaafxkUivJ9fC+hQWF0n498="
+    },
+    "strip": 0,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-power/indicator-power_12.10.6+17.10.20170829.1-0ubuntu9.diff.gz",
+      "file": "indicator-power_12.10.6+17.10.20170829.1-0ubuntu9.diff.gz",
+      "hash": "sha256-Lm9bs9RaPIVPkSqSPSRv3J2Og48+Um0697g+87MHvTM="
+    }
+  },
+  "indicator-session": {
+    "version": "17.3.20+21.10.20210613.1-0ubuntu5",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-session/indicator-session_17.3.20+21.10.20210613.1.orig.tar.gz",
+      "file": "indicator-session_17.3.20+21.10.20210613.1.orig.tar.gz",
+      "hash": "sha256-+dpqLwgOZ5RKce67dEw9n119UyQo4HLEo6D7sLO7auk="
+    },
+    "strip": 0,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-session/indicator-session_17.3.20+21.10.20210613.1-0ubuntu5.diff.gz",
+      "file": "indicator-session_17.3.20+21.10.20210613.1-0ubuntu5.diff.gz",
+      "hash": "sha256-7ikA5aanVJoBY7J+u0zTyMcGXTYeTOdic/bMhP1Kino="
+    }
+  },
+  "indicator-keyboard": {
+    "version": "0.0.0+19.10.20240924-0ubuntu1",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-keyboard/indicator-keyboard_0.0.0+19.10.20240924.orig.tar.gz",
+      "file": "indicator-keyboard_0.0.0+19.10.20240924.orig.tar.gz",
+      "hash": "sha256-260K0ZlmX1YZdVhikbA7dz2sfOYXOo9Jg+UQV3pXbVs="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-keyboard/indicator-keyboard_0.0.0+19.10.20240924-0ubuntu1.diff.gz",
+      "file": "indicator-keyboard_0.0.0+19.10.20240924-0ubuntu1.diff.gz",
+      "hash": "sha256-rPQWBGFRxm5dF+jPgOmzGWGGVWu+n1c/6WqbNidZ0nw="
+    }
+  },
+  "indicator-bluetooth": {
+    "version": "0.0.6+17.10.20170605-0ubuntu7",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-bluetooth/indicator-bluetooth_0.0.6+17.10.20170605.orig.tar.gz",
+      "file": "indicator-bluetooth_0.0.6+17.10.20170605.orig.tar.gz",
+      "hash": "sha256-1nzwaHUmyennDEUSQv1vPbBYjOBS0u9JhoD86gCD6EY="
+    },
+    "strip": 0,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-bluetooth/indicator-bluetooth_0.0.6+17.10.20170605-0ubuntu7.diff.gz",
+      "file": "indicator-bluetooth_0.0.6+17.10.20170605-0ubuntu7.diff.gz",
+      "hash": "sha256-kQQBzv6BWWMUi0/elNEv0z9AXJpp5uGBZzi3ymR0AS8="
+    }
+  },
+  "indicator-messages": {
+    "version": "13.10.1+18.10.20180918-0ubuntu7",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-messages/indicator-messages_13.10.1+18.10.20180918.orig.tar.gz",
+      "file": "indicator-messages_13.10.1+18.10.20180918.orig.tar.gz",
+      "hash": "sha256-0FHdhFkS4vXWvlv8vZzixTRg8BFwfSmrcovuXxWTjOc="
+    },
+    "strip": 0,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/i/indicator-messages/indicator-messages_13.10.1+18.10.20180918-0ubuntu7.diff.gz",
+      "file": "indicator-messages_13.10.1+18.10.20180918-0ubuntu7.diff.gz",
+      "hash": "sha256-3PQNPYxJGBi6CmQQdnUXgshD1Dcno6/yhvB+Dst4vRQ="
+    }
+  },
+  "unity-asset-pool": {
+    "version": "0.8.24+17.10.20170507-0ubuntu4",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-asset-pool/unity-asset-pool_0.8.24+17.10.20170507.orig.tar.gz",
+      "file": "unity-asset-pool_0.8.24+17.10.20170507.orig.tar.gz",
+      "hash": "sha256-jz/334Ta8oFl5veNEoe1TIbSKhYS9myGVdi+9ymoW4s="
+    },
+    "strip": 0,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-asset-pool/unity-asset-pool_0.8.24+17.10.20170507-0ubuntu4.diff.gz",
+      "file": "unity-asset-pool_0.8.24+17.10.20170507-0ubuntu4.diff.gz",
+      "hash": "sha256-5PB/DR2JPhqpyVl0TDdy8eE/VkPSAJItw/zVdqeNVaY="
+    }
+  },
+  "gsettings-ubuntu-touch-schemas": {
+    "version": "0.0.7+21.10.20210712-0ubuntu4",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gsettings-ubuntu-touch-schemas/gsettings-ubuntu-touch-schemas_0.0.7+21.10.20210712.orig.tar.gz",
+      "file": "gsettings-ubuntu-touch-schemas_0.0.7+21.10.20210712.orig.tar.gz",
+      "hash": "sha256-pKHDKPc+grXvaSk8fgUfs3wlGEzFy1Lnt6lvWp3ls/w="
+    },
+    "strip": 0,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gsettings-ubuntu-touch-schemas/gsettings-ubuntu-touch-schemas_0.0.7+21.10.20210712-0ubuntu4.diff.gz",
+      "file": "gsettings-ubuntu-touch-schemas_0.0.7+21.10.20210712-0ubuntu4.diff.gz",
+      "hash": "sha256-K4Eec5Lq13LuDvJh0nNxm6pE196D7KsIOo2EJs88wcQ="
+    }
+  },
+  "libcolumbus": {
+    "version": "1.1.0+15.10.20150806-0ubuntu39",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/libc/libcolumbus/libcolumbus_1.1.0+15.10.20150806.orig.tar.gz",
+      "file": "libcolumbus_1.1.0+15.10.20150806.orig.tar.gz",
+      "hash": "sha256-tX/EpNCpC2InPxHV6czeDrbM6fIgyjAGMdldEVaQ63k="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/libc/libcolumbus/libcolumbus_1.1.0+15.10.20150806-0ubuntu39.diff.gz",
+      "file": "libcolumbus_1.1.0+15.10.20150806-0ubuntu39.diff.gz",
+      "hash": "sha256-y15KvxZD5gbTY7p/mZ4z/qbsPu9wFGNxveHxjDhC2iM="
+    }
+  },
+  "gtk+3.0": {
+    "version": "3.24.52-0ubuntu1",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gtk+3.0/gtk+3.0_3.24.52.orig.tar.xz",
+      "file": "gtk+3.0_3.24.52.orig.tar.xz",
+      "hash": "sha256-gJMfpHKne5oWT2dA48C0RPrGdwBUYy01p/+dZ55ee58="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/g/gtk+3.0/gtk+3.0_3.24.52-0ubuntu1.debian.tar.xz",
+      "file": "gtk+3.0_3.24.52-0ubuntu1.debian.tar.xz",
+      "hash": "sha256-+K07JR5bF8JXn16l7ahCyPGOJYoJ3Cl0xvRZ1Or9PTk="
+    }
+  },
+  "accountsservice": {
+    "version": "23.13.9-8ubuntu5.2",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/a/accountsservice/accountsservice_23.13.9.orig.tar.xz",
+      "file": "accountsservice_23.13.9.orig.tar.xz",
+      "hash": "sha256-rdpM3q4k+gmS598///nv+nCQvjrCM6Pt/fadWpybkk8="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/a/accountsservice/accountsservice_23.13.9-8ubuntu5.2.debian.tar.xz",
+      "file": "accountsservice_23.13.9-8ubuntu5.2.debian.tar.xz",
+      "hash": "sha256-PaB4KlZ0n/YjrgL4pi216v939V6HMg0TzyNFwW6JXec="
+    }
+  },
+  "libzeitgeist": {
+    "version": "0.3.18-1ubuntu7",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/libz/libzeitgeist/libzeitgeist_0.3.18.orig.tar.gz",
+      "file": "libzeitgeist_0.3.18.orig.tar.gz",
+      "hash": "sha256-gsEo2XpoYAUYuOPmXvTVsSPFfz1d+pd8f/czwP34D3M="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/libz/libzeitgeist/libzeitgeist_0.3.18-1ubuntu7.debian.tar.xz",
+      "file": "libzeitgeist_0.3.18-1ubuntu7.debian.tar.xz",
+      "hash": "sha256-1vjCiU9KzwpUSDTaFRC/o72741EfKdIrC0tmpMDsmtE="
+    }
+  },
+  "dee-qt": {
+    "version": "3.3+14.04.20140317-0ubuntu9",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/d/dee-qt/dee-qt_3.3+14.04.20140317.orig.tar.gz",
+      "file": "dee-qt_3.3+14.04.20140317.orig.tar.gz",
+      "hash": "sha256-w3K2pRV6ZhT655vUt1Jz88zb3g9W6ZYhHAAMWjx037s="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/d/dee-qt/dee-qt_3.3+14.04.20140317-0ubuntu9.diff.gz",
+      "file": "dee-qt_3.3+14.04.20140317-0ubuntu9.diff.gz",
+      "hash": "sha256-dz52vFsKhemu5m6WW4OysEiHIYTUV4NDUgWJjI0q6CQ="
+    }
+  },
+  "cmake-extras": {
+    "version": "1.9-1",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/c/cmake-extras/cmake-extras_1.9.orig.tar.bz2",
+      "file": "cmake-extras_1.9.orig.tar.bz2",
+      "hash": "sha256-aFlCAf81/5y6gsWPoEgDD2fMIvU8p2EkV2pMGCIN2xg="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/c/cmake-extras/cmake-extras_1.9-1.debian.tar.xz",
+      "file": "cmake-extras_1.9-1.debian.tar.xz",
+      "hash": "sha256-+C3ECjuHD4nt2PKI6wI3SggwyB36OxPx8Ev5end9ZSY="
+    }
+  },
+  "whoopsie": {
+    "version": "0.2.82ubuntu",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/w/whoopsie/whoopsie_0.2.82ubuntu.tar.xz",
+      "file": "whoopsie_0.2.82ubuntu.tar.xz",
+      "hash": "sha256-+YNi/zbZdiUOjkez+GFF/1cjFgetY25/am5wUt1kaAc="
+    },
+    "strip": 1,
+    "packaging": null
+  },
+  "unity-greeter": {
+    "version": "25.04.1-0ubuntu1",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/u/unity-greeter/unity-greeter_25.04.1-0ubuntu1.tar.xz",
+      "file": "unity-greeter_25.04.1-0ubuntu1.tar.xz",
+      "hash": "sha256-GmOvb2wsRurcfYbvOSSBgy6LdgBePtDf0FN4V5HRCEQ="
+    },
+    "strip": 1,
+    "packaging": null
+  },
+  "libtimezonemap": {
+    "version": "0.4.6-7build1",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/libt/libtimezonemap/libtimezonemap_0.4.6.orig.tar.gz",
+      "file": "libtimezonemap_0.4.6.orig.tar.gz",
+      "hash": "sha256-DWNMwkdtj1fR7hhkvU9EIYCuS/BAqa5L9ztmu9hdcZU="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/main/libt/libtimezonemap/libtimezonemap_0.4.6-7build1.debian.tar.xz",
+      "file": "libtimezonemap_0.4.6-7build1.debian.tar.xz",
+      "hash": "sha256-3OT2eDew3PxG1fBNXlYFEZSc+UfcO6JNcDU+ZCIEdmc="
+    }
+  },
+  "geonames": {
+    "version": "0.3.1-3",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/g/geonames/geonames_0.3.1.orig.tar.gz",
+      "file": "geonames_0.3.1.orig.tar.gz",
+      "hash": "sha256-ArleFoKgEd7t3hvXButkg/KRx36It0zs+nSJ5LfOPzI="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/g/geonames/geonames_0.3.1-3.debian.tar.xz",
+      "file": "geonames_0.3.1-3.debian.tar.xz",
+      "hash": "sha256-uRK6bUT4ZyOQwp43V5kzm93/Zxgh7rY8GJyOACgYElY="
+    }
+  },
+  "fcitx": {
+    "version": "1:4.2.9.9-2.1",
+    "src": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/f/fcitx/fcitx_4.2.9.9.orig.tar.xz",
+      "file": "fcitx_4.2.9.9.orig.tar.xz",
+      "hash": "sha256-Rarxnxh3SrzXoYwnKVOLY3ebGhiD8eY202T4fChAqXQ="
+    },
+    "strip": 1,
+    "packaging": {
+      "url": "https://archive.ubuntu.com/ubuntu/pool/universe/f/fcitx/fcitx_4.2.9.9-2.1.debian.tar.xz",
+      "file": "fcitx_4.2.9.9-2.1.debian.tar.xz",
+      "hash": "sha256-lLhIJWGt7/M/UMkMXh+T2RcuyDsj+ExwFxVWiXvmLfA="
+    }
+  }
+}
