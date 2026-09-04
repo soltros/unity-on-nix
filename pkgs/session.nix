@@ -56,7 +56,7 @@ let
     secondary-color='#772953'
     color-shading-type='vertical'
     [com.canonical.Unity.Launcher]
-    favorites=['application://unity-files.desktop', 'application://unity-terminal.desktop', 'application://unity-control-center.desktop', 'unity://running-apps', 'unity://devices']
+    favorites=['application://unity-files.desktop', 'application://unity-terminal.desktop', 'application://unity-system-settings.desktop', 'unity://running-apps', 'unity://devices']
     [com.canonical.Unity.ApplicationsLens]
     display-available-apps=false
     EOF
@@ -72,7 +72,7 @@ in pkgs.stdenvNoCC.mkDerivation {
   dontBuild = true;
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/share/applications $out/share/unity $out/share/xsessions $out/share/cinnamon-session/sessions $out/share/nemo/actions
+    mkdir -p $out/bin $out/share/applications $out/share/unity $out/share/xsessions $out/share/cinnamon-session/sessions $out/share/nemo/actions $out/etc/xdg/menus
     # Scope metadata is generated with each provider's own prefix, although
     # the navigation and category artwork is supplied by Unity and its asset
     # pool. Keep a corrected metadata copy first in XDG_DATA_DIRS so the Dash
@@ -118,6 +118,30 @@ in pkgs.stdenvNoCC.mkDerivation {
     Categories=Settings;DesktopSettings;
     Keywords=Unity;Theme;Icons;Appearance;GTK;Font;Cursor;
     StartupNotify=true
+    EOF
+    cat >$out/share/applications/unity-system-settings.desktop <<EOF
+    [Desktop Entry]
+    Name=System Settings
+    Comment=Configure Unity and the system
+    Exec=${u.unity-control-center}/bin/unity-control-center --overview
+    Icon=preferences-system
+    Terminal=false
+    Type=Application
+    Categories=Settings;DesktopSettings;System;
+    Keywords=Preferences;Settings;System;Unity;
+    StartupNotify=true
+    EOF
+    # Keep all desktop entries visible to the lens, including Nix and Flatpak
+    # applications whose categories do not match Ubuntu's historical layout.
+    cat >$out/etc/xdg/menus/unity-lens-applications.menu <<'EOF'
+    <!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+      "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
+    <Menu>
+      <Name>Applications</Name>
+      <DefaultAppDirs/>
+      <DefaultDirectoryDirs/>
+      <Include><All/></Include>
+    </Menu>
     EOF
     mkdir -p $out/etc/xdg/autostart
     # These are supervised by the Unity target, not launched a second time
