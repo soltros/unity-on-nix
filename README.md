@@ -33,7 +33,8 @@ menus, local scopes, locking, logout, and hardware behavior. Build success and
 runtime verification are tracked separately so the project does not claim a
 feature merely because it compiles.
 
-Current target: **x86_64-linux on X11**.
+Current target: **x86_64-linux on X11**. We intend to investigate a Wayland
+session after the X11 implementation is complete, polished, and dependable.
 
 ## Try it
 
@@ -197,7 +198,8 @@ apply the relevant Debian patch series. Unity itself is pinned to commit
   omitted. IBus is included; its old FCITX control-center integration is not.
 - Compiz's old Python settings GUI, protobuf cache, and separate GTK window
   decorator are omitted. Unity provides its own window decorations.
-- There is currently no Wayland session.
+- There is currently no Wayland session. Wayland is planned as a later phase,
+  once the X11 session provides a complete and polished Unity experience.
 
 ## Contributing
 

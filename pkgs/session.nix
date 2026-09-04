@@ -5,14 +5,14 @@ let
   components = with u; [
     gsettings-desktop-schemas-unity gsettings-ubuntu-schemas
     cinnamon-session-unity
-    unity compiz nux libunity unity-settings-daemon unity-control-center unity-greeter
+    unity compiz nux libunity gtk3-unity unity-settings-daemon unity-control-center unity-greeter
     unity-asset-pool unity-gtk-module bamf-session hud unity-scope-home unity-lens-applications
     unity-lens-files unity-lens-music unity-lens-video unity-lens-photos
     indicator-appmenu indicator-application indicator-sound
     indicator-power indicator-session indicator-datetime indicator-keyboard
     indicator-bluetooth indicator-messages
   ] ++ (with pkgs; [
-    cinnamon-desktop libgnomekbd ibus glib.bin nemo
+    cinnamon-desktop libgnomekbd ibus glib.bin nemo lxappearance
     zeitgeist notify-osd networkmanagerapplet polkit_gnome
     ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts xterm
   ]);
@@ -106,6 +106,18 @@ in pkgs.stdenvNoCC.mkDerivation {
     Categories=System;TerminalEmulator;
     StartupNotify=true
     StartupWMClass=XTerm
+    EOF
+    cat >$out/share/applications/unity-appearance.desktop <<EOF
+    [Desktop Entry]
+    Name=Unity Appearance
+    Comment=Choose GTK themes, icon themes, fonts, and pointer styles
+    Exec=${pkgs.lxappearance}/bin/lxappearance
+    Icon=preferences-desktop-theme
+    Terminal=false
+    Type=Application
+    Categories=Settings;DesktopSettings;
+    Keywords=Unity;Theme;Icons;Appearance;GTK;Font;Cursor;
+    StartupNotify=true
     EOF
     mkdir -p $out/etc/xdg/autostart
     # These are supervised by the Unity target, not launched a second time

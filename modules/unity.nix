@@ -87,7 +87,7 @@ in {
     };
     systemd.user.services = {
       unity-shell = (sessionService "Unity shell" "${u.compiz}/bin/compiz --replace ccp") // {
-        after = [ "graphical-session-pre.target" "unity-panel.service" "unity-bamf.service" ];
+        after = [ "graphical-session-pre.target" "unity-panel.service" "unity-bamf.service" "unity-applications-scope.service" ];
       };
       unity-panel = (sessionService "Unity panel service" "${u.unity}/lib/unity/unity-panel-service") // {
         after = [ "graphical-session-pre.target" "unity-bamf.service" ];
@@ -101,6 +101,16 @@ in {
           RestartSec = 2;
           Type = "dbus";
           BusName = "org.ayatana.bamf";
+        };
+      };
+      unity-applications-scope = (sessionService "Unity installed applications search"
+        "${u.libunity}/bin/unity-scope-loader applications/applications.scope applications/scopes.scope commands.scope") // {
+        serviceConfig = {
+          ExecStart = "${u.libunity}/bin/unity-scope-loader applications/applications.scope applications/scopes.scope commands.scope";
+          Restart = "on-failure";
+          RestartSec = 2;
+          Type = "dbus";
+          BusName = "com.canonical.Unity.Scope.Applications";
         };
       };
       unity-ibus = sessionService "Unity input methods" "${pkgs.ibus}/bin/ibus-daemon --xim";
