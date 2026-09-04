@@ -97,6 +97,10 @@ in rec {
   };
   unity-lens-applications = auto "unity-lens-applications" {
     buildInputs = with pkgs; [ base.libunity glib dee libgee libzeitgeist libcolumbus gnome-menus xapian db apt ];
+    postInstall = ''
+      substituteInPlace $out/share/dbus-1/services/unity-scope-applications.service \
+        --replace-fail "$out/bin/unity-scope-loader" "${base.libunity}/bin/unity-scope-loader"
+    '';
     configureFlags = [ "--enable-localinstall" "--disable-headless-tests" ];
   };
   unity-gtk-module = auto "unity-gtk-module" {
