@@ -122,12 +122,11 @@ in {
       unity-ibus = sessionService "Unity input methods" "${pkgs.ibus}/bin/ibus-daemon --xim";
       unity-hud = sessionService "Unity HUD" "${u.hud}/libexec/hud/hud-service";
       unity-nemo = sessionService "Unity desktop icons" "${pkgs.nemo}/bin/nemo-desktop";
-      unity-network = sessionService "Unity network indicator" "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator --sm-disable" // {
-        # nm-applet publishes an Ayatana AppIndicator. Start it after the
-        # Unity panel and application indicator host so registration is
-        # reliable on login and after a panel restart.
+      unity-network = sessionService "Unity network indicator" "${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable" // {
+        # Unity's indicator host handles the standard tray applet. The
+        # newer --indicator status item is rejected by Unity.
         serviceConfig = {
-          ExecStart = "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator --sm-disable";
+          ExecStart = "${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable";
           Restart = "on-failure";
           RestartSec = 2;
         };
