@@ -2,7 +2,7 @@
 let
   inherit (pkgs) lib;
   u = unityPackages;
-  unity-theme-settings = pkgs.writeScriptBin "unity-theme-settings" ''
+  unity-theme-settings-script = pkgs.writeScriptBin "unity-theme-settings" ''
     #!${pkgs.python3.withPackages (p: [ p.pygobject3 ])}/bin/python3
     import gi
     gi.require_version("Gtk", "3.0")
@@ -19,6 +19,8 @@ let
       c = Gtk.ComboBoxText()
       for v in values: c.append_text(v)
       current = interface.get_string(key)
+      if current not in values:
+        values.append(current); c.append_text(current)
       if current in values: c.set_active(values.index(current))
       r.pack_end(c, False, False, 0); box.pack_start(r, False, False, 0)
       return c
@@ -26,14 +28,37 @@ let
     icon = row("Icon theme", icons, "icon-theme")
     font = Gtk.FontButton(); font.set_font(interface.get_string("font-name"))
     r = Gtk.Box(spacing=12); r.pack_start(Gtk.Label(label="Font", xalign=0), True, True, 0); r.pack_end(font, False, False, 0); box.pack_start(r, False, False, 0)
-    color = Gtk.ColorButton(); color.set_rgba(Gdk.RGBA(0.17, 0, 0.12, 1))
+    color = Gtk.ColorButton()
+    initial_color = Gdk.RGBA()
+    initial_color.parse(background.get_string("primary-color"))
+    color.set_rgba(initial_color)
+    color_changed = False
+    def mark_color_changed(_):
+      global color_changed
+      color_changed = True
+    color.connect("color-set", mark_color_changed)
     r = Gtk.Box(spacing=12); r.pack_start(Gtk.Label(label="Background", xalign=0), True, True, 0); r.pack_end(color, False, False, 0); box.pack_start(r, False, False, 0)
     apply = Gtk.Button(label="Apply"); box.pack_end(apply, False, False, 0)
     def save(_):
       interface.set_string("gtk-theme", theme.get_active_text()); interface.set_string("icon-theme", icon.get_active_text()); interface.set_string("font-name", font.get_font_name())
-      rgba = color.get_rgba(); background.set_string("primary-color", rgba.to_string()); background.set_string("picture-uri", "")
+      if color_changed:
+        rgba = color.get_rgba()
+        value = "#{:02x}{:02x}{:02x}".format(round(rgba.red*255), round(rgba.green*255), round(rgba.blue*255))
+        background.set_string("primary-color", value)
+        background.set_string("color-shading-type", "solid")
+        background.set_string("picture-uri", "")
     apply.connect("clicked", save); win.connect("destroy", Gtk.main_quit); win.show_all(); Gtk.main()
   '';
+  unity-theme-settings = pkgs.stdenvNoCC.mkDerivation {
+    pname = "unity-theme-settings";
+    version = "1.0";
+    dontUnpack = true;
+    nativeBuildInputs = [ pkgs.wrapGAppsHook3 pkgs.gobject-introspection ];
+    buildInputs = [ u.gtk3-unity pkgs.glib u.gsettings-desktop-schemas-unity ];
+    installPhase = ''
+      install -Dm755 ${unity-theme-settings-script}/bin/unity-theme-settings $out/bin/unity-theme-settings
+    '';
+  };
   components = with u; [
     gsettings-desktop-schemas-unity gsettings-ubuntu-schemas
     cinnamon-session-unity
