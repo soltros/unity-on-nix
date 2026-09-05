@@ -64,6 +64,16 @@ PY
     # Unity loads the Dash button directly from its own icon directory.
     install -Dm644 ${nixos-icons}/share/icons/hicolor/128x128/apps/nix-snowflake-white.png \
       $out/share/unity/icons/launcher_bfb.png
+    cat > $out/share/unity/icons/launcher_bfb.svg <<'EOF'
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+      <g fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round">
+        <path d="M64 12v104M19 38l90 52M19 90l90-52"/>
+        <path d="M64 12l-9 14m9-14 9 14M64 116l-9-14m9 14 9-14"/>
+        <path d="M19 38l17 1m-17-1 8 15M109 90l-17-1m17 1-8-15"/>
+        <path d="M19 90l8-15m-8 15 17-1M109 38l-8 15m8-15-17 1"/>
+      </g>
+    </svg>
+    EOF
   '';
   meta = {
     description = "Unity 7 desktop shell";
