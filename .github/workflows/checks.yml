@@ -1,0 +1,21 @@
+name: Unity checks
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: unity-checks-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      - name: Allow Nix test VMs to use KVM
+        run: sudo chmod a+rw /dev/kvm
+      - name: Build and run flake checks
+        run: nix flake check --print-build-logs

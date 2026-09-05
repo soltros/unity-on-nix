@@ -301,7 +301,7 @@ in pkgs.stdenvNoCC.mkDerivation {
     export COMPIZ_CONFIG_DIR=${u.unity}/etc/compizconfig
     export COMPIZ_METADATA_PATH=${u.unity}/share/compiz
     export COMPIZ_PLUGIN_DIR=${u.unity}/lib/compiz:${u.compiz}/lib/compiz
-    export UNITY_INDICATOR_DIR=${indicators}/lib/indicators/3:${indicators}/share/unity/indicators
+    export UNITY_INDICATOR_DIR=${indicators}/lib/indicators/3
     export UNITY_INDICATOR_SERVICE_DIR=${indicators}/share/unity/indicators
     export GSETTINGS_SCHEMA_DIR=${schemas}/share/glib-2.0/schemas
     export XDG_DATA_DIRS=@out@/share:${data}/share:''${XDG_DATA_DIRS:-/run/current-system/sw/share}

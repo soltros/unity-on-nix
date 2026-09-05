@@ -14,6 +14,7 @@
       modules = [ self.nixosModules.default ./tests/vm.nix ];
     };
     checks.${system} = {
+      login = import ./tests/login.nix { inherit pkgs; };
       shell-smoke = import ./tests/shell-smoke.nix { inherit pkgs; unityPackages = self.packages.${system}; };
       module = import ./tests/eval.nix { inherit nixpkgs pkgs; };
       foundations = import ./tests/build-interfaces.nix {

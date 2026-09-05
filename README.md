@@ -87,6 +87,10 @@ nix build path:.#unity-session
 
 The graphical check starts Unity under Xvfb, verifies the launcher and panel, and opens an application window. `tests/install-vm-apps.sh` installs Nix profile and Flatpak applications for manual Dash testing.
 
+GitHub Actions runs the flake checks on pushes and pull requests. The `login` check boots a separate test VM, logs in through LightDM, checks the Unity services and panel windows, and opens GNOME Terminal. Its automatic login is limited to that test VM. Running this check requires KVM; the standalone Xvfb smoke check does not.
+
+The module evaluation check also verifies that enabling Unity leaves the system's `pkgs.gtk3` unchanged. Canonical GTK patches stay in the Unity package set.
+
 ## Known limitations
 
 - Reboot and shutdown actions are still being tested across LightDM and logind.
