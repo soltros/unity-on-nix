@@ -1,0 +1,201 @@
+{
+  "org.gnome.desktop.interface": [
+    "cursor-size",
+    "cursor-theme",
+    "document-font-name",
+    "font-antialiasing",
+    "font-hinting",
+    "font-name",
+    "font-rgba-order",
+    "gtk-theme",
+    "icon-theme",
+    "monospace-font-name",
+    "text-scaling-factor"
+  ],
+  "org.gnome.desktop.wm.preferences": [
+    "action-double-click-titlebar",
+    "action-middle-click-titlebar",
+    "action-right-click-titlebar",
+    "auto-raise",
+    "auto-raise-delay",
+    "button-layout",
+    "focus-mode",
+    "raise-on-click",
+    "theme",
+    "titlebar-font"
+  ],
+  "org.gnome.settings-daemon.plugins.xsettings": [
+    "antialiasing",
+    "hinting"
+  ],
+  "org.gnome.desktop.background": [
+    "color-shading-type",
+    "picture-options",
+    "picture-uri",
+    "picture-uri-dark",
+    "primary-color",
+    "secondary-color"
+  ],
+  "org.compiz.unityshell": [
+    "alt-tab-bias-viewport",
+    "alt-tab-forward",
+    "alt-tab-forward-all",
+    "alt-tab-next-window",
+    "alt-tab-prev",
+    "alt-tab-prev-all",
+    "alt-tab-prev-window",
+    "alt-tab-timeout",
+    "autohide-animation",
+    "background-color",
+    "backlight-mode",
+    "dash-blur-experimental",
+    "disable-show-desktop",
+    "edge-responsiveness",
+    "execute-command",
+    "icon-size",
+    "keyboard-focus",
+    "launch-animation",
+    "launcher-hide-mode",
+    "launcher-minimize-window",
+    "launcher-opacity",
+    "launcher-switcher-forward",
+    "launcher-switcher-prev",
+    "menus-discovery-duration",
+    "num-launchers",
+    "panel-first-menu",
+    "panel-opacity",
+    "panel-opacity-maximized-toggle",
+    "reveal-trigger",
+    "shortcut-overlay",
+    "show-desktop-key",
+    "show-hud",
+    "show-launcher",
+    "show-minimized-windows",
+    "urgent-animation"
+  ],
+  "com.canonical.Unity.Launcher": [
+    "favorites",
+    "launcher-position"
+  ],
+  "com.canonical.Unity.Lenses": [
+    "remote-content-search"
+  ],
+  "com.canonical.Unity.ApplicationsLens": [
+    "display-available-apps",
+    "display-recent-apps"
+  ],
+  "com.canonical.Unity.FilesLens": [
+    "use-locate"
+  ],
+  "com.canonical.Unity.Runner": [
+    "history"
+  ],
+  "com.canonical.indicator.appmenu.hud": [
+    "store-usage-data"
+  ],
+  "com.canonical.indicator.datetime": [
+    "show-calendar",
+    "show-clock",
+    "show-date",
+    "show-day",
+    "show-seconds",
+    "time-format"
+  ],
+  "com.canonical.indicator.bluetooth": [
+    "visible"
+  ],
+  "com.canonical.indicator.power": [
+    "icon-policy",
+    "show-time"
+  ],
+  "com.canonical.indicator.sound": [
+    "interested-media-players",
+    "preferred-media-players",
+    "show-notify-osd-on-scroll",
+    "visible"
+  ],
+  "com.canonical.indicator.session": [
+    "show-real-name-on-panel"
+  ],
+  "com.canonical.notify-osd": [
+    "multihead-mode"
+  ],
+  "org.compiz.core": [
+    "active-plugins",
+    "close-window-key",
+    "hsize",
+    "raise-on-click",
+    "show-desktop-edge",
+    "show-desktop-key",
+    "vsize"
+  ],
+  "org.compiz.animation": [
+    "minimize-effects",
+    "unminimize-effects"
+  ],
+  "org.compiz.opengl": [
+    "sync-to-vblank",
+    "texture-filter"
+  ],
+  "org.compiz.scale": [
+    "initiate-all-edge",
+    "initiate-all-key",
+    "initiate-edge",
+    "initiate-key",
+    "overlay-icon",
+    "show-desktop",
+    "spacing"
+  ],
+  "org.compiz.ezoom": [
+    "follow-focus",
+    "zoom-in-key",
+    "zoom-out-key"
+  ],
+  "org.compiz.move": [
+    "border-color",
+    "fill-color",
+    "initiate-key"
+  ],
+  "org.compiz.resize": [
+    "border-color",
+    "fill-color",
+    "initiate-key"
+  ],
+  "org.compiz.grid": [
+    "bottom-edge-action",
+    "bottom-left-corner-action",
+    "bottom-right-corner-action",
+    "fill-color",
+    "left-edge-action",
+    "outline-color",
+    "right-edge-action",
+    "top-edge-action",
+    "top-left-corner-action",
+    "top-right-corner-action"
+  ],
+  "org.compiz.expo": [
+    "expo-edge",
+    "expo-key",
+    "selected-color"
+  ],
+  "org.compiz.wall": [
+    "outline-color"
+  ],
+  "org.nemo.desktop": [
+    "home-icon-visible",
+    "network-icon-visible",
+    "trash-icon-visible",
+    "volumes-visible"
+  ],
+  "org.gnome.desktop.peripherals.touchpad": [],
+  "org.gnome.desktop.peripherals.mouse": [],
+  "org.gnome.desktop.lockdown": [
+    "disable-lock-screen",
+    "disable-log-out",
+    "disable-printing",
+    "disable-user-switching"
+  ],
+  "com.canonical.desktop.interface": [
+    "scrollbar-mode"
+  ]
+}

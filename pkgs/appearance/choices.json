@@ -1,0 +1,168 @@
+{
+  "org.gnome.settings-daemon.plugins.xsettings:antialiasing": [
+    [
+      "none",
+      "None"
+    ],
+    [
+      "grayscale",
+      "Grayscale"
+    ],
+    [
+      "rgba",
+      "RGBA"
+    ]
+  ],
+  "org.gnome.settings-daemon.plugins.xsettings:hinting": [
+    [
+      "none",
+      "None"
+    ],
+    [
+      "slight",
+      "Slight"
+    ],
+    [
+      "medium",
+      "Medium"
+    ],
+    [
+      "full",
+      "Full"
+    ]
+  ],
+  "com.canonical.desktop.interface:scrollbar-mode": [
+    [
+      "overlay-auto",
+      "Default"
+    ],
+    [
+      "overlay-pointer",
+      "Overlay with mouse"
+    ],
+    [
+      "overlay-touch",
+      "No overlay"
+    ],
+    [
+      "normal",
+      "Default"
+    ]
+  ],
+  "org.compiz.unityshell:autohide-animation": [
+    [
+      0,
+      "Fade Dash and slide"
+    ],
+    [
+      1,
+      "Slide only"
+    ],
+    [
+      2,
+      "Fade only"
+    ],
+    [
+      3,
+      "Fade and slide"
+    ]
+  ],
+  "org.compiz.unityshell:urgent-animation": [
+    [
+      0,
+      "No animation"
+    ],
+    [
+      1,
+      "Pulse"
+    ],
+    [
+      2,
+      "Wiggle"
+    ]
+  ],
+  "org.compiz.unityshell:launch-animation": [
+    [
+      0,
+      "No animation"
+    ],
+    [
+      1,
+      "Pulse"
+    ],
+    [
+      2,
+      "Blink"
+    ]
+  ],
+  "org.compiz.unityshell:backlight-mode": [
+    [
+      0,
+      "All applications"
+    ],
+    [
+      1,
+      "Open applications only"
+    ],
+    [
+      2,
+      "No colouring"
+    ],
+    [
+      3,
+      "Coloured edges"
+    ],
+    [
+      4,
+      "Alternated for each workspace"
+    ]
+  ],
+  "org.compiz.opengl:texture-filter": [
+    [
+      0,
+      "Fast"
+    ],
+    [
+      1,
+      "Good"
+    ],
+    [
+      2,
+      "Best"
+    ]
+  ],
+  "org.gnome.desktop.wm.preferences:focus-mode": [
+    [
+      0,
+      "Toggle shade"
+    ],
+    [
+      1,
+      "Maximize"
+    ],
+    [
+      2,
+      "Horizontal expand"
+    ],
+    [
+      3,
+      "Vertical expand"
+    ],
+    [
+      4,
+      "Minimize"
+    ],
+    [
+      5,
+      "No action"
+    ],
+    [
+      6,
+      "Lower"
+    ],
+    [
+      7,
+      "Menu"
+    ]
+  ]
+}
