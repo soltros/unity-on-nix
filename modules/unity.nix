@@ -122,9 +122,9 @@ in {
       unity-ibus = sessionService "Unity input methods" "${pkgs.ibus}/bin/ibus-daemon --xim";
       unity-hud = sessionService "Unity HUD" "${u.hud}/libexec/hud/hud-service";
       unity-nemo = sessionService "Unity desktop icons" "${pkgs.nemo}/bin/nemo-desktop";
-      unity-network = sessionService "Unity network indicator" "${u.lomiri-indicator-network}/libexec/lomiri-indicator-network/lomiri-indicator-network-service" // {
+      unity-network = sessionService "Unity network indicator" "${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable" // {
         serviceConfig = {
-          ExecStart = "${u.lomiri-indicator-network}/libexec/lomiri-indicator-network/lomiri-indicator-network-service";
+          ExecStart = "${pkgs.networkmanagerapplet}/bin/nm-applet --sm-disable";
           Restart = "on-failure";
           RestartSec = 2;
         };
