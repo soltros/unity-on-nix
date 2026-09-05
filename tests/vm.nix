@@ -3,6 +3,10 @@
   system.stateVersion = "26.05";
   networking.hostName = "unity-test";
   virtualisation.memorySize = 4096;
+  virtualisation.diskSize = 8192;
+  # Preserve nix-env installations across VM restarts, just like a real host.
+  virtualisation.writableStoreUseTmpfs = false;
+  fileSystems."/".autoResize = true;
   virtualisation.cores = 4;
   virtualisation.graphics = true;
   services.desktopManager.unity.enable = true;
@@ -11,7 +15,7 @@
   users.users.tester = {
     isNormalUser = true;
     initialPassword = "test-only";
-    extraGroups = [ "networkmanager" "systemd-journal" ];
+    extraGroups = [ "wheel" "networkmanager" "systemd-journal" ];
   };
   services.flatpak.enable = true;
   environment.systemPackages = [ pkgs.xterm pkgs.xdotool pkgs.geany pkgs.galculator ];
