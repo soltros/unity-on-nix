@@ -149,13 +149,21 @@ in pkgs.stdenvNoCC.mkDerivation {
     [Desktop Entry]
     Name=Files
     Comment=Browse and organize files
-    Exec=${pkgs.nemo}/bin/nemo
+    Exec=${pkgs.nemo}/bin/nemo %U
     Icon=system-file-manager
     Terminal=false
     Type=Application
     Categories=System;FileManager;
+    MimeType=inode/directory;application/x-gnome-saved-search;
     StartupNotify=true
     StartupWMClass=Nemo
+    EOF
+    # Folder results in the Files lens use GIO's default URI-capable handler.
+    # Scope these defaults to Unity and preserve explicit user associations.
+    cat >$out/etc/xdg/unity-mimeapps.list <<EOF
+    [Default Applications]
+    inode/directory=unity-files.desktop;
+    application/x-gnome-saved-search=unity-files.desktop;
     EOF
     cat >$out/share/applications/unity-terminal.desktop <<EOF
     [Desktop Entry]
