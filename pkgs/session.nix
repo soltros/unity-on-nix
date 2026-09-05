@@ -79,7 +79,7 @@ let
   ] ++ (with pkgs; [
     cinnamon-desktop libgnomekbd ibus glib.bin nemo
     zeitgeist notify-osd networkmanagerapplet polkit_gnome
-    ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts gnome-terminal kitty gnome-screenshot unity-theme-settings wallpapers
+    ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts gnome-terminal kitty gnome-screenshot firefox thunderbird rhythmbox vlc unity-theme-settings wallpapers
   ]);
   data = pkgs.buildEnv {
     name = "unity-session-data";
@@ -121,7 +121,7 @@ let
     secondary-color='#772953'
     color-shading-type='vertical'
     [com.canonical.Unity.Launcher]
-    favorites=['application://unity-files.desktop', 'application://unity-terminal.desktop', 'application://unity-system-settings.desktop', 'unity://running-apps', 'unity://devices']
+    favorites=['application://unity-files.desktop', 'application://org.gnome.Terminal.desktop', 'application://firefox.desktop', 'application://thunderbird.desktop', 'application://org.gnome.Rhythmbox3.desktop', 'application://vlc.desktop', 'application://unity-system-settings.desktop', 'unity://running-apps', 'unity://devices']
     [com.canonical.Unity.ApplicationsLens]
     display-available-apps=false
     [com.canonical.unity.settings-daemon.plugins.media-keys]
