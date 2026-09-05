@@ -123,7 +123,7 @@ let
     secondary-color='#772953'
     color-shading-type='vertical'
     [com.canonical.Unity.Launcher]
-    favorites=['application://unity-files.desktop', 'application://org.gnome.Terminal.desktop', 'application://firefox.desktop', 'application://thunderbird.desktop', 'application://org.gnome.Rhythmbox3.desktop', 'application://vlc.desktop', 'application://unity-system-settings.desktop', 'unity://running-apps', 'unity://devices']
+    favorites=['application://unity-files.desktop', 'application://org.gnome.Terminal.desktop', 'application://firefox.desktop', 'application://thunderbird.desktop', 'application://org.gnome.Software.desktop', 'application://org.gnome.Rhythmbox3.desktop', 'application://vlc.desktop', 'application://unity-system-settings.desktop', 'unity://running-apps', 'unity://devices']
     [com.canonical.Unity.ApplicationsLens]
     display-available-apps=false
     [com.canonical.unity.settings-daemon.plugins.media-keys]
