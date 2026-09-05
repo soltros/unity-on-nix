@@ -3,9 +3,11 @@
 # shell or its settings daemon. Keep the latter out of the runtime closure.
 pkgs.cinnamon-session.overrideAttrs (old: {
   pname = "cinnamon-session-unity";
-  buildInputs = builtins.filter (p: p != pkgs.cinnamon-settings-daemon) old.buildInputs;
+  buildInputs = builtins.filter (p: p != pkgs.cinnamon-settings-daemon) old.buildInputs
+    ++ [ pkgs.gtk3 pkgs.python3Packages.pygobject3 ];
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${pkgs.cinnamon-desktop}/share")
+    gappsWrapperArgs+=(--prefix GI_TYPELIB_PATH : "${pkgs.gtk3}/lib/girepository-1.0")
   '';
   postPatch = (old.postPatch or "") + ''
     substituteInPlace cinnamon-session/csm-manager.c \
