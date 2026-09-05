@@ -27,6 +27,12 @@ logins through LightDM and renders the Unity shell, launcher, panel, Dash, and
 desktop. The session also starts HUD, indicators, BAMF application matching,
 input methods, settings services, and the GTK desktop portal.
 
+![Unity on Nix proof of concept](docs-unity-proof-of-concept.png)
+
+The screenshot shows the current desktop running on NixOS with the Unity
+launcher, Dash, GNOME Terminal, Unity Control Center, NixOS branding, and
+Ubuntu wallpapers.
+
 We are now working through the less glamorous but essential integration work:
 reliable application launching and discovery, theme and icon fidelity, global
 menus, local scopes, locking, logout, and hardware behavior. Build success and
