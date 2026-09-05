@@ -123,9 +123,9 @@ in {
         };
       };
       unity-applications-scope = (sessionService "Unity installed applications search"
-        "${u.libunity}/bin/unity-scope-loader applications/applications.scope applications/scopes.scope commands.scope") // {
+        "${u.libunity}/bin/unity-scope-loader applications/applications.scope applications/scopes.scope commands.scope flatpak/catalogue.scope") // {
         serviceConfig = {
-          ExecStart = "${u.libunity}/bin/unity-scope-loader applications/applications.scope applications/scopes.scope commands.scope";
+          ExecStart = "${u.libunity}/bin/unity-scope-loader applications/applications.scope applications/scopes.scope commands.scope flatpak/catalogue.scope";
           Restart = "on-failure";
           RestartSec = 2;
           Type = "dbus";

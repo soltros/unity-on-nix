@@ -82,6 +82,15 @@ class Appearance(Gtk.Window):
         self.add(root)
         self.search = Gtk.SearchEntry(placeholder_text='Find a setting…')
         root.pack_start(self.search, False, False, 0)
+        actions = Gtk.Box(spacing=8)
+        apply = Gtk.Button(label='Apply')
+        apply.set_tooltip_text('Save all changed settings and refresh Unity')
+        apply.connect('clicked', self.apply_changes)
+        reset = Gtk.Button(label='Reset visible settings')
+        reset.connect('clicked', self.reset_visible)
+        actions.pack_end(apply, False, False, 0)
+        actions.pack_end(reset, False, False, 0)
+        root.pack_start(actions, False, False, 0)
         if profile_error:
             root.pack_start(Gtk.Label(label=profile_error, wrap=True), False, False, 0)
         self.status = Gtk.Label(xalign=0, wrap=True)
@@ -114,6 +123,21 @@ class Appearance(Gtk.Window):
                         box.pack_start(Gtk.Label(label=f'{key.replace("-", " ")}: unavailable in this build', xalign=0), False, False, 0)
         self.search.connect('search-changed', self.filter_rows)
         self.connect('destroy', Gtk.main_quit)
+
+    def apply_changes(self, _button):
+        Gio.Settings.sync()
+        self.status.set_text('Settings applied. Unity components will refresh where supported.')
+
+    def reset_visible(self, _button):
+        count = 0
+        for _, row in self.rows:
+            if row.get_visible():
+                for child in row.get_children():
+                    if isinstance(child, Gtk.Button) and child.get_label() == 'Reset' and child.get_sensitive():
+                        child.emit('clicked')
+                        count += 1
+        Gio.Settings.sync()
+        self.status.set_text(f'Reset {count} visible settings.')
 
     def filter_rows(self, entry):
         query = entry.get_text().casefold()
