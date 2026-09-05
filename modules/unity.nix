@@ -122,7 +122,17 @@ in {
       unity-ibus = sessionService "Unity input methods" "${pkgs.ibus}/bin/ibus-daemon --xim";
       unity-hud = sessionService "Unity HUD" "${u.hud}/libexec/hud/hud-service";
       unity-nemo = sessionService "Unity desktop icons" "${pkgs.nemo}/bin/nemo-desktop";
-      unity-network = sessionService "Unity network indicator" "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator";
+      unity-network = sessionService "Unity network indicator" "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator --sm-disable" // {
+        # nm-applet publishes an Ayatana AppIndicator. Start it after the
+        # Unity panel and application indicator host so registration is
+        # reliable on login and after a panel restart.
+        serviceConfig = {
+          ExecStart = "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator --sm-disable";
+          Restart = "on-failure";
+          RestartSec = 2;
+        };
+        after = [ "unity-panel.service" "unity-indicator-application.service" ];
+      };
       unity-polkit = sessionService "Unity authentication agent" "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
     } // lib.listToAttrs (map (name: {
       name = "unity-indicator-${name}";
