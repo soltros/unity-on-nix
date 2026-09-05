@@ -162,8 +162,8 @@ in pkgs.stdenvNoCC.mkDerivation {
     # Scope these defaults to Unity and preserve explicit user associations.
     cat >$out/etc/xdg/unity-mimeapps.list <<EOF
     [Default Applications]
-    inode/directory=unity-files.desktop;
-    application/x-gnome-saved-search=unity-files.desktop;
+    inode/directory=nemo.desktop;
+    application/x-gnome-saved-search=nemo.desktop;
     EOF
     cat >$out/share/applications/unity-terminal.desktop <<EOF
     [Desktop Entry]

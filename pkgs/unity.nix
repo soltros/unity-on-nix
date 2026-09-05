@@ -27,6 +27,10 @@ stdenv.mkDerivation {
     "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON"
   ];
   postPatch = ''
+    # Unrecognized directory handlers must not leave GetDefault() null:
+    # StorageLauncherIcon dereferences it while constructing drive icons.
+    substituteInPlace unity-shared/FileManager.cpp \
+      --replace-fail 'else if (app_id == "nemo.desktop")' 'else'
     # The session assembles indicators from independent Nix packages.
     python3 - <<'PY'
 from pathlib import Path

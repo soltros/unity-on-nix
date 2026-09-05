@@ -13,6 +13,20 @@ in pkgs.runCommand "unity-shell-smoke" {
 } ''
   mkdir -p $out "$TMPDIR/config" "$TMPDIR/data" "$TMPDIR/runtime"
   chmod 700 "$TMPDIR/runtime"
+  # Regression: a valid folder handler with an unfamiliar desktop ID used to
+  # make FileManager::GetDefault return null and crash launcher construction.
+  mkdir -p "$TMPDIR/data/applications"
+  cat > "$TMPDIR/data/applications/test-folder-handler.desktop" <<EOF
+  [Desktop Entry]
+  Type=Application
+  Name=Test folder handler
+  Exec=${pkgs.coreutils}/bin/true %U
+  MimeType=inode/directory;
+  EOF
+  cat > "$TMPDIR/config/mimeapps.list" <<EOF
+  [Default Applications]
+  inode/directory=test-folder-handler.desktop;
+  EOF
   export FONTCONFIG_FILE=${pkgs.makeFontsConf { fontDirectories = [ pkgs.dejavu_fonts ]; }}
   export XDG_CACHE_HOME="$TMPDIR/cache"
   export XDG_CONFIG_HOME="$TMPDIR/config" XDG_DATA_HOME="$TMPDIR/data"
