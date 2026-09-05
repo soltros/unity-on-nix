@@ -8,6 +8,7 @@ let
     unity = pkgs.callPackage ./unity.nix {
       inherit (packages) compiz nux libunity libunity-misc xpathselect libindicator
         ido unity-settings-daemon gtk3-unity gsettings-ubuntu-schemas;
+      nixos-icons = pkgs.nixos-icons;
     };
     unity-session = import ./session.nix { inherit pkgs; unityPackages = packages; };
     default = packages.unity-session;

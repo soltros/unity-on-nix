@@ -5,7 +5,7 @@
   libstartup_notification, libsigcxx, zeitgeist, geis, libx11, libxfixes,
   libxi, libxrender, libxinerama, libxtst, xcbutilwm, libGL, libGLU,
   pam, boost, systemd, wrapGAppsHook3, gsettings-desktop-schemas,
-  gsettings-ubuntu-schemas }:
+  gsettings-ubuntu-schemas, nixos-icons }:
 stdenv.mkDerivation {
   pname = "unity";
   version = "7.7.1";
@@ -60,6 +60,11 @@ PY
       --replace-fail 'DESTINATION ''${COMPIZ_DATADIR}/ccsm' 'DESTINATION ${placeholder "out"}/share/compiz/ccsm'
   '';
   enableParallelBuilding = true;
+  postInstall = ''
+    # Unity loads the Dash button directly from its own icon directory.
+    install -Dm644 ${nixos-icons}/share/icons/hicolor/128x128/apps/nix-snowflake-white.png \
+      $out/share/unity/icons/launcher_bfb.png
+  '';
   meta = {
     description = "Unity 7 desktop shell";
     homepage = "https://gitlab.com/ubuntu-unity/unity/unity";
