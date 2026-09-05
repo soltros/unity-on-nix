@@ -78,7 +78,7 @@ let
     indicator-bluetooth indicator-messages
   ] ++ (with pkgs; [
     cinnamon-desktop libgnomekbd ibus glib.bin nemo
-    zeitgeist notify-osd networkmanagerapplet polkit_gnome
+    zeitgeist notify-osd networkmanagerapplet iwgtk polkit_gnome
     ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts gnome-terminal kitty gnome-screenshot firefox thunderbird rhythmbox vlc unity-theme-settings wallpapers
   ]);
   data = pkgs.buildEnv {

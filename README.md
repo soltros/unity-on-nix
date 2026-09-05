@@ -58,7 +58,8 @@ services.desktopManager.unity.lightdm.enable = false;
 - Ubuntu 26.04 wallpapers and chooser catalogue
 - NixOS snowflake launcher button
 - PipeWire, GVfs, UDisks, UPower, NetworkManager, polkit, keyring, and XDG portals
-- Network Connections GUI for configuring and scanning wired, Wi-Fi, and VPN connections
+- iwgtk for scanning and connecting to Wi-Fi networks
+- Network Connections for editing wired, Wi-Fi, and VPN profiles
 
 Only the Cinnamon session manager and shared Cinnamon desktop library are used. The Cinnamon shell and Settings Daemon are excluded.
 
@@ -83,7 +84,7 @@ The graphical check starts Unity under Xvfb, verifies the launcher and panel, an
 ## Known limitations
 
 - Reboot and shutdown actions are still being tested across LightDM and logind.
-- The Wi-Fi/network indicator is a known issue. NetworkManager and the Network Connections GUI work while the Unity panel indicator is being completed.
+- The Wi-Fi/network panel indicator is a known issue. Open iwgtk from the Dash to scan and connect to Wi-Fi. Network Connections remains available for profile editing; it does not provide a nearby-network scanner.
 - Application indexing and icon loading need testing with more Nix and Flatpak applications.
 - Some legacy Ubuntu global-menu and online-service integrations are unavailable.
 - Graphics, suspend, multi-monitor, locking, and other hardware behavior need broader testing.

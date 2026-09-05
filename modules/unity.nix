@@ -66,6 +66,8 @@ in {
     services.colord.enable = true;
     services.libinput.enable = true;
     networking.networkmanager.enable = lib.mkDefault true;
+    # Share iwd with iwgtk; NetworkManager retains IP and DNS configuration.
+    networking.networkmanager.wifi.backend = lib.mkDefault "iwd";
     hardware.graphics.enable = true;
     security.polkit.enable = true;
     security.pam.services.unity = {};
