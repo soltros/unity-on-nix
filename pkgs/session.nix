@@ -91,7 +91,7 @@ let
     name = "unity-indicators";
     paths = with u; [ indicator-appmenu indicator-application indicator-sound
       indicator-power indicator-session indicator-datetime indicator-keyboard
-      indicator-bluetooth indicator-messages ];
+      indicator-bluetooth indicator-messages lomiri-indicator-network ];
     pathsToLink = [ "/lib/indicators" "/share/unity/indicators" ];
   };
   schemas = pkgs.runCommand "unity-session-schemas" { nativeBuildInputs = [ pkgs.glib ]; } ''
