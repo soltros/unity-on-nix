@@ -3,7 +3,6 @@ let
   base = import ./components.nix { inherit pkgs; };
   packages = base // (import ./desktop-components.nix { inherit pkgs base; }) // {
     cinnamon-session-unity = import ./cinnamon-session-unity.nix { inherit pkgs; };
-    lomiri-indicator-network = pkgs.callPackage ./lomiri-indicator-network.nix {};
     compiz = pkgs.callPackage ./compiz.nix {};
     nux = pkgs.callPackage ./nux.nix {};
     unity = pkgs.callPackage ./unity.nix {
