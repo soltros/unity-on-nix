@@ -97,10 +97,11 @@ in pkgs.stdenvNoCC.mkDerivation {
     EOF
     cat >$out/share/applications/unity-terminal.desktop <<EOF
     [Desktop Entry]
-    Name=Terminal
+    Name=Kitty
+    GenericName=Terminal
     Comment=Use the command line
     Exec=${pkgs.kitty}/bin/kitty
-    Icon=utilities-terminal
+    Icon=kitty
     Terminal=false
     Type=Application
     Categories=System;TerminalEmulator;
@@ -198,6 +199,9 @@ in pkgs.stdenvNoCC.mkDerivation {
     export UNITY_INDICATOR_SERVICE_DIR=${indicators}/share/unity/indicators
     export GSETTINGS_SCHEMA_DIR=${schemas}/share/glib-2.0/schemas
     export XDG_DATA_DIRS=@out@/share:${data}/share:''${XDG_DATA_DIRS:-/run/current-system/sw/share}
+    # Include both Flatpak installation scopes, even when their directories
+    # are created after the user first logs in.
+    export XDG_DATA_DIRS="$XDG_DATA_DIRS:''${XDG_DATA_HOME:-$HOME/.local/share}/flatpak/exports/share:/var/lib/flatpak/exports/share"
     # The applications lens installs its menu definition under etc/xdg. If it
     # is absent, the Dash starts normally but indexes an empty application set.
     export XDG_CONFIG_DIRS=@out@/etc/xdg:${u.unity-lens-applications}/etc/xdg:${u.unity-settings-daemon}/etc/xdg:''${XDG_CONFIG_DIRS:-/etc/xdg}

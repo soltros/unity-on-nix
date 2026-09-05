@@ -9,6 +9,9 @@ let
     wantedBy = [ "unity-session.target" ];
     partOf = [ "unity-session.target" ];
     after = [ "graphical-session-pre.target" ];
+    # Inherit the login session's PATH imported into the user manager. The
+    # NixOS service default hides profile apps and fails desktop TryExec checks.
+    environment.PATH = lib.mkForce null;
     serviceConfig = { ExecStart = command; Restart = "on-failure"; RestartSec = 2; };
   };
   indicatorNames = [ "application" "sound" "power" "session" "datetime" "keyboard" "bluetooth" "messages" ];

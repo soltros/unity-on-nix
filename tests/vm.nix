@@ -13,7 +13,8 @@
     initialPassword = "test-only";
     extraGroups = [ "networkmanager" "systemd-journal" ];
   };
-  environment.systemPackages = [ pkgs.xterm pkgs.xdotool ];
+  services.flatpak.enable = true;
+  environment.systemPackages = [ pkgs.xterm pkgs.xdotool pkgs.geany pkgs.galculator ];
   # Test credentials and automatic login are confined to this VM.
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = true;

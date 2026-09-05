@@ -26,6 +26,8 @@ assert builtins.hasAttr "unity-bamf" enabled.config.systemd.user.services;
 assert enabled.config.systemd.user.services.unity-bamf.serviceConfig.Type == "dbus";
 assert builtins.hasAttr "unity-applications-scope" enabled.config.systemd.user.services;
 assert enabled.config.systemd.user.services.unity-applications-scope.serviceConfig.Type == "dbus";
+assert enabled.config.systemd.user.services.unity-applications-scope.environment.PATH == null;
+assert enabled.config.systemd.user.services.unity-shell.environment.PATH == null;
 assert enabled.config.systemd.user.services.unity-applications-scope.serviceConfig.BusName == "com.canonical.Unity.Scope.Applications";
 assert !enabled.config.services.xserver.desktopManager.cinnamon.enable;
 assert !(builtins.elem enabled.pkgs.cinnamon-settings-daemon enabled.config.environment.systemPackages);
