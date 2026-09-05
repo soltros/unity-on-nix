@@ -11,6 +11,7 @@ let
     interface = Gio.Settings.new("org.gnome.desktop.interface")
     background = Gio.Settings.new("org.gnome.desktop.background")
     launcher = Gio.Settings.new("com.canonical.Unity.Launcher")
+    has_launcher_size = "launcher-icon-size" in launcher.list_keys()
     themes = ["Ambiance", "Radiance", "Adwaita", "Adwaita-dark"]
     icons = ["ubuntu-mono-dark", "ubuntu-mono-light", "Adwaita", "hicolor"]
     win = Gtk.Window(title="Unity Appearance")
@@ -29,7 +30,8 @@ let
     theme = row("GTK theme", themes, "gtk-theme")
     icon = row("Icon theme", icons, "icon-theme")
     size = Gtk.SpinButton.new_with_range(24, 64, 1)
-    size.set_value(launcher.get_int("launcher-icon-size"))
+    size.set_value(launcher.get_int("launcher-icon-size") if has_launcher_size else 48)
+    size.set_sensitive(has_launcher_size)
     r = Gtk.Box(spacing=12); r.pack_start(Gtk.Label(label="Dock icon size", xalign=0), True, True, 0); r.pack_end(size, False, False, 0); box.pack_start(r, False, False, 0)
     font = Gtk.FontButton(); font.set_font(interface.get_string("font-name"))
     r = Gtk.Box(spacing=12); r.pack_start(Gtk.Label(label="Font", xalign=0), True, True, 0); r.pack_end(font, False, False, 0); box.pack_start(r, False, False, 0)
@@ -45,7 +47,8 @@ let
     r = Gtk.Box(spacing=12); r.pack_start(Gtk.Label(label="Background", xalign=0), True, True, 0); r.pack_end(color, False, False, 0); box.pack_start(r, False, False, 0)
     apply = Gtk.Button(label="Apply"); box.pack_end(apply, False, False, 0)
     def save(_):
-      interface.set_string("gtk-theme", theme.get_active_text()); interface.set_string("icon-theme", icon.get_active_text()); interface.set_string("font-name", font.get_font_name()); launcher.set_int("launcher-icon-size", size.get_value_as_int())
+      interface.set_string("gtk-theme", theme.get_active_text()); interface.set_string("icon-theme", icon.get_active_text()); interface.set_string("font-name", font.get_font_name())
+      if has_launcher_size: launcher.set_int("launcher-icon-size", size.get_value_as_int())
       if color_changed:
         rgba = color.get_rgba()
         value = "#{:02x}{:02x}{:02x}".format(round(rgba.red*255), round(rgba.green*255), round(rgba.blue*255))
