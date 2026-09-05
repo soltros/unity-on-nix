@@ -2,6 +2,7 @@
 let
   inherit (pkgs) lib;
   u = unityPackages;
+  wallpapers = import ./wallpapers.nix { inherit pkgs; };
   unity-theme-settings-script = pkgs.writeScriptBin "unity-theme-settings" ''
     #!${pkgs.python3.withPackages (p: [ p.pygobject3 ])}/bin/python3
     import gi
@@ -71,7 +72,7 @@ let
   ] ++ (with pkgs; [
     cinnamon-desktop libgnomekbd ibus glib.bin nemo
     zeitgeist notify-osd networkmanagerapplet polkit_gnome
-    ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts gnome-terminal kitty gnome-screenshot unity-theme-settings
+    ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts gnome-terminal kitty gnome-screenshot unity-theme-settings wallpapers
   ]);
   data = pkgs.buildEnv {
     name = "unity-session-data";
@@ -116,10 +117,10 @@ let
     favorites=['application://unity-files.desktop', 'application://unity-terminal.desktop', 'application://unity-system-settings.desktop', 'unity://running-apps', 'unity://devices']
     [com.canonical.Unity.ApplicationsLens]
     display-available-apps=false
-    [org.gnome.settings-daemon.plugins.media-keys]
-    screenshot=['Print']
-    window-screenshot=['<Alt>Print']
-    area-screenshot=['<Shift>Print']
+    [com.canonical.unity.settings-daemon.plugins.media-keys]
+    screenshot='Print'
+    window-screenshot='<Alt>Print'
+    area-screenshot='<Shift>Print'
     EOF
     glib-compile-schemas --strict $out/share/glib-2.0/schemas
   '';
