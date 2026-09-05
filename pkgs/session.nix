@@ -2,6 +2,38 @@
 let
   inherit (pkgs) lib;
   u = unityPackages;
+  unity-theme-settings = pkgs.writeScriptBin "unity-theme-settings" ''
+    #!${pkgs.python3.withPackages (p: [ p.pygobject3 ])}/bin/python3
+    import gi
+    gi.require_version("Gtk", "3.0")
+    from gi.repository import Gtk, Gio, Gdk
+    interface = Gio.Settings.new("org.gnome.desktop.interface")
+    background = Gio.Settings.new("org.gnome.desktop.background")
+    themes = ["Ambiance", "Radiance", "Adwaita", "Adwaita-dark"]
+    icons = ["ubuntu-mono-dark", "ubuntu-mono-light", "Adwaita", "hicolor"]
+    win = Gtk.Window(title="Unity Appearance")
+    win.set_border_width(18); win.set_default_size(420, 260)
+    box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12); win.add(box)
+    def row(label, values, key):
+      r = Gtk.Box(spacing=12); r.pack_start(Gtk.Label(label=label, xalign=0), True, True, 0)
+      c = Gtk.ComboBoxText()
+      for v in values: c.append_text(v)
+      current = interface.get_string(key)
+      if current in values: c.set_active(values.index(current))
+      r.pack_end(c, False, False, 0); box.pack_start(r, False, False, 0)
+      return c
+    theme = row("GTK theme", themes, "gtk-theme")
+    icon = row("Icon theme", icons, "icon-theme")
+    font = Gtk.FontButton(); font.set_font(interface.get_string("font-name"))
+    r = Gtk.Box(spacing=12); r.pack_start(Gtk.Label(label="Font", xalign=0), True, True, 0); r.pack_end(font, False, False, 0); box.pack_start(r, False, False, 0)
+    color = Gtk.ColorButton(); color.set_rgba(Gdk.RGBA(0.17, 0, 0.12, 1))
+    r = Gtk.Box(spacing=12); r.pack_start(Gtk.Label(label="Background", xalign=0), True, True, 0); r.pack_end(color, False, False, 0); box.pack_start(r, False, False, 0)
+    apply = Gtk.Button(label="Apply"); box.pack_end(apply, False, False, 0)
+    def save(_):
+      interface.set_string("gtk-theme", theme.get_active_text()); interface.set_string("icon-theme", icon.get_active_text()); interface.set_string("font-name", font.get_font_name())
+      rgba = color.get_rgba(); background.set_string("primary-color", rgba.to_string()); background.set_string("picture-uri", "")
+    apply.connect("clicked", save); win.connect("destroy", Gtk.main_quit); win.show_all(); Gtk.main()
+  '';
   components = with u; [
     gsettings-desktop-schemas-unity gsettings-ubuntu-schemas
     cinnamon-session-unity
@@ -12,9 +44,9 @@ let
     indicator-power indicator-session indicator-datetime indicator-keyboard
     indicator-bluetooth indicator-messages
   ] ++ (with pkgs; [
-    cinnamon-desktop libgnomekbd ibus glib.bin nemo lxappearance
+    cinnamon-desktop libgnomekbd ibus glib.bin nemo
     zeitgeist notify-osd networkmanagerapplet polkit_gnome
-    ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts gnome-terminal kitty
+    ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts gnome-terminal kitty unity-theme-settings
   ]);
   data = pkgs.buildEnv {
     name = "unity-session-data";
@@ -112,7 +144,7 @@ in pkgs.stdenvNoCC.mkDerivation {
     [Desktop Entry]
     Name=Unity Appearance
     Comment=Choose GTK themes, icon themes, fonts, and pointer styles
-    Exec=${pkgs.lxappearance}/bin/lxappearance
+    Exec=${unity-theme-settings}/bin/unity-theme-settings
     Icon=preferences-desktop-theme
     Terminal=false
     Type=Application
