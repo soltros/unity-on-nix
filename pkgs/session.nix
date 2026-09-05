@@ -46,7 +46,7 @@ let
   ] ++ (with pkgs; [
     cinnamon-desktop libgnomekbd ibus glib.bin nemo
     zeitgeist notify-osd networkmanagerapplet polkit_gnome
-    ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts gnome-terminal kitty unity-theme-settings
+    ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts gnome-terminal kitty gnome-screenshot unity-theme-settings
   ]);
   data = pkgs.buildEnv {
     name = "unity-session-data";
@@ -91,6 +91,10 @@ let
     favorites=['application://unity-files.desktop', 'application://unity-terminal.desktop', 'application://unity-system-settings.desktop', 'unity://running-apps', 'unity://devices']
     [com.canonical.Unity.ApplicationsLens]
     display-available-apps=false
+    [org.gnome.settings-daemon.plugins.media-keys]
+    screenshot=['Print']
+    window-screenshot=['<Alt>Print']
+    area-screenshot=['<Shift>Print']
     EOF
     glib-compile-schemas --strict $out/share/glib-2.0/schemas
   '';
@@ -162,6 +166,17 @@ in pkgs.stdenvNoCC.mkDerivation {
     Type=Application
     Categories=Settings;DesktopSettings;System;
     Keywords=Preferences;Settings;System;Unity;
+    StartupNotify=true
+    EOF
+    cat >$out/share/applications/unity-screenshot.desktop <<EOF
+    [Desktop Entry]
+    Name=Screenshot
+    Comment=Capture the screen
+    Exec=${pkgs.gnome-screenshot}/bin/gnome-screenshot --interactive
+    Icon=applets-screenshooter
+    Terminal=false
+    Type=Application
+    Categories=Graphics;Utility;
     StartupNotify=true
     EOF
     # Keep all desktop entries visible to the lens, including Nix and Flatpak
