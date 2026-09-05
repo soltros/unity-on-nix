@@ -220,6 +220,17 @@ in pkgs.stdenvNoCC.mkDerivation {
     Categories=Graphics;Utility;
     StartupNotify=true
     EOF
+    cat >$out/share/applications/nm-connection-editor-unity.desktop <<EOF
+    [Desktop Entry]
+    Name=Network Connections
+    Comment=Configure wired and wireless network connections
+    Exec=${pkgs.networkmanagerapplet}/bin/nm-connection-editor
+    Icon=network-workgroup
+    Terminal=false
+    Type=Application
+    Categories=Settings;Network;
+    StartupNotify=true
+    EOF
     # Keep all desktop entries visible to the lens, including Nix and Flatpak
     # applications whose categories do not match Ubuntu's historical layout.
     cat >$out/etc/xdg/menus/unity-lens-applications.menu <<'EOF'
