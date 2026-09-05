@@ -14,7 +14,7 @@ let
   ] ++ (with pkgs; [
     cinnamon-desktop libgnomekbd ibus glib.bin nemo lxappearance
     zeitgeist notify-osd networkmanagerapplet polkit_gnome
-    ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts kitty
+    ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts gnome-terminal kitty
   ]);
   data = pkgs.buildEnv {
     name = "unity-session-data";
@@ -48,7 +48,7 @@ let
     icon-theme='ubuntu-mono-dark'
     font-name='Ubuntu 11'
     [org.gnome.desktop.default-applications.terminal]
-    exec='kitty'
+    exec='gnome-terminal'
     exec-arg='-e'
     [org.gnome.desktop.background]
     picture-uri=""
@@ -97,16 +97,16 @@ in pkgs.stdenvNoCC.mkDerivation {
     EOF
     cat >$out/share/applications/unity-terminal.desktop <<EOF
     [Desktop Entry]
-    Name=Kitty
+    Name=Terminal
     GenericName=Terminal
     Comment=Use the command line
-    Exec=${pkgs.kitty}/bin/kitty
-    Icon=kitty
+    Exec=${pkgs.gnome-terminal}/bin/gnome-terminal
+    Icon=utilities-terminal
     Terminal=false
     Type=Application
     Categories=System;TerminalEmulator;
     StartupNotify=true
-    StartupWMClass=kitty
+    StartupWMClass=Gnome-terminal
     EOF
     cat >$out/share/applications/unity-appearance.desktop <<EOF
     [Desktop Entry]
