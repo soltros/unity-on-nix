@@ -63,6 +63,12 @@ services.desktopManager.unity.lightdm.enable = false;
 
 Only the Cinnamon session manager and shared Cinnamon desktop library are used. The Cinnamon shell and Settings Daemon are excluded.
 
+## Software and Flatpak
+
+GNOME Software is included for browsing, installing, and updating Flatpak apps. The module enables Flatpak and adds the system Flathub remote. Nix packages remain managed through Nix.
+
+The experimental Flatpak Dash lens searches Flatpak catalogue metadata and opens app details in GNOME Software. An empty search shows editor suggestions. The first search may wait for catalogue metadata to download. App-specific artwork and live desktop testing are still pending. A separate Nix lens is planned.
+
 ## VM testing
 
 ```sh

@@ -73,12 +73,14 @@ let
     unity compiz nux libunity gtk3-unity unity-settings-daemon unity-control-center unity-greeter
     unity-asset-pool unity-gtk-module bamf-session hud unity-scope-home unity-lens-applications
     unity-lens-files unity-lens-music unity-lens-video unity-lens-photos
+    unity-flatpak-scope
     indicator-appmenu indicator-application indicator-sound
     indicator-power indicator-session indicator-datetime indicator-keyboard
     indicator-bluetooth indicator-messages
   ] ++ (with pkgs; [
     cinnamon-desktop libgnomekbd ibus glib.bin nemo
     zeitgeist notify-osd networkmanagerapplet iwgtk polkit_gnome
+    gnome-software
     ubuntu-themes adwaita-icon-theme ubuntu-classic dejavu_fonts gnome-terminal kitty gnome-screenshot firefox thunderbird rhythmbox vlc unity-theme-settings wallpapers
   ]);
   data = pkgs.buildEnv {

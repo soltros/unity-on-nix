@@ -2,6 +2,7 @@
 let
   base = import ./components.nix { inherit pkgs; };
   packages = base // (import ./desktop-components.nix { inherit pkgs base; }) // {
+    unity-flatpak-scope = import ./flatpak-scope { inherit pkgs; inherit (base) libunity; };
     cinnamon-session-unity = import ./cinnamon-session-unity.nix { inherit pkgs; };
     lomiri-indicator-network = pkgs.lomiri.lomiri-indicator-network;
     compiz = pkgs.callPackage ./compiz.nix {};

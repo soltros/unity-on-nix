@@ -61,6 +61,17 @@ in {
     services.gnome.evolution-data-server.enable = true;
     services.gnome.glib-networking.enable = true;
     services.gvfs.enable = true;
+    services.flatpak.enable = lib.mkDefault true;
+    systemd.services.unity-flathub = lib.mkIf config.services.flatpak.enable {
+      description = "Configure Flathub for Unity Software";
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+      serviceConfig = { Type = "oneshot"; RemainAfterExit = true; };
+      script = ''
+        ${pkgs.flatpak}/bin/flatpak remote-add --system --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+      '';
+    };
     services.udisks2.enable = true;
     services.upower.enable = true;
     services.colord.enable = true;
