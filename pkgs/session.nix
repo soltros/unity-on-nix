@@ -93,13 +93,6 @@ let
       indicator-power indicator-session indicator-datetime indicator-keyboard
       indicator-bluetooth indicator-messages lomiri-indicator-network ];
     pathsToLink = [ "/lib/indicators" "/share/unity/indicators" ];
-    postBuild = ''
-      mkdir -p $out/lib/indicators/3
-      for f in $out/share/unity/indicators/*; do
-        [ -e "$f" ] || continue
-        ln -sf "$f" "$out/lib/indicators/3/$(basename "$f")"
-      done
-    '';
   };
   schemas = pkgs.runCommand "unity-session-schemas" { nativeBuildInputs = [ pkgs.glib ]; } ''
     mkdir -p $out/share/glib-2.0/schemas
