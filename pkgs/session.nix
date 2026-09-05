@@ -187,6 +187,11 @@ in pkgs.stdenvNoCC.mkDerivation {
     # Put Unity7 first: several desktop-menu consumers use the first token
     # when evaluating OnlyShowIn, and Unity's own panels target Unity7.
     export XDG_CURRENT_DESKTOP=Unity7:Unity:ubuntu
+    # Unity is an X11 session. Prevent Kitty/GLFW from selecting a stale
+    # Wayland socket inherited from the display manager.
+    export KITTY_DISABLE_WAYLAND=1
+    export GDK_BACKEND=x11
+    unset WAYLAND_DISPLAY
     export DESKTOP_SESSION=ubuntu
     export GDMSESSION=unity
     export GDK_PIXBUF_MODULE_FILE=${pkgs.librsvg}/${pkgs.gdk-pixbuf.binaryDir}/loaders.cache
@@ -211,7 +216,7 @@ in pkgs.stdenvNoCC.mkDerivation {
     export GTK_PATH=${u.unity-gtk-module}/lib/gtk-3.0
     export LD_LIBRARY_PATH=${u.gtk3-unity}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
     ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd \
-      DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP DESKTOP_SESSION GDMSESSION GNOME_DESKTOP_SESSION_ID GDK_PIXBUF_MODULE_FILE \
+      DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP DESKTOP_SESSION GDMSESSION GNOME_DESKTOP_SESSION_ID GDK_PIXBUF_MODULE_FILE KITTY_DISABLE_WAYLAND GDK_BACKEND \
       COMPIZ_CONFIG_PROFILE COMPIZ_CONFIG_DIR COMPIZ_PLUGIN_DIR COMPIZ_METADATA_PATH UNITY_INDICATOR_DIR \
       UNITY_INDICATOR_SERVICE_DIR GSETTINGS_SCHEMA_DIR XDG_DATA_DIRS XDG_CONFIG_DIRS PATH GTK_MODULES GTK_PATH GTK_DATA_PREFIX LD_LIBRARY_PATH
     trap cleanup EXIT
